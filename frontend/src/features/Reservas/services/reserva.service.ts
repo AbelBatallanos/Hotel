@@ -1,0 +1,17 @@
+import api from "../../../api/axios"
+import type { TReservacion } from "../../../types";
+
+
+export const getAllMisReservasApi = async()=>{
+    return await api.get("/myreservas");
+}
+
+
+export const CrearReservaApi = async(reserva:TReservacion )=>{
+    return await api.post("/reservacion", reserva);
+}
+
+
+export const getAllReservacionesApi = async()=>{
+    return await api.get("/reservaciones");
+}
