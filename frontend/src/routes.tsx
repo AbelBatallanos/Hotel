@@ -11,6 +11,7 @@ import EditarHabitacion from "./features/Habitaciones/page/EdithabitacionPage";i
 import RegistrarPersonalPage from "./features/Personal/page/RegistrarPersonalPage";
 import MisReservasPage from "./features/Reservas/pages/MisReservasPage";
 import CrearReserva from "./features/Reservas/pages/CrearReserva";
+import ReservacionesPage from "./features/Reservas/pages/ReservacionesPage";
 
 
 
@@ -32,7 +33,11 @@ export default function AppRoutes(){
                     {/* <Route path="/favoritos" element={<MisReservasPage />} /> */}
                     <Route path="/reservas/nueva" element={<CrearReserva />} /> 
                     {/* <Route path="/reservas/:id/factura" element={<FacturaPage />} /> */}
-
+                    <Route path="/reservaciones" element={<ReservacionesPage/>}>          
+                    </Route>
+                    <Route path="/reservacion/:id/confirmacion" element={<ReservacionesPage/>}></Route>
+                  
+                  
                   {/* HABITACIONES */}
                     <Route path="/habitaciones" element={<IndexHabitacionesPage />} />
                     <Route path="/habitaciones/nueva" element={<CrearHabitacion />} />

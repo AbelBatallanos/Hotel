@@ -2,7 +2,7 @@ import { NavLink } from "react-router-dom"
 import type { THabitaciones } from "../types"
 import { CheckCircleIcon, CurrencyDollarIcon, HashtagIcon, PencilSquareIcon, TagIcon, UsersIcon, XCircleIcon } from "@heroicons/react/24/solid";
 import useAppStore from "../../../store/appStore";
-
+import { urlApi, urlImage } from "../../../api/axios"; 
 interface IHabitaciones {
     HabitacionesData : THabitaciones[];
     agregarHabitacion: (habitacion: THabitaciones)=>void;
@@ -22,8 +22,6 @@ export default function Habitaciones({HabitacionesData, agregarHabitacion, usuar
 
     return(
         <>
-
-
         <div className="p-4 md:p-8 bg-slate-50 min-h-screen">
             {/* Encabezado Principal */}
             <div className="mb-12 text-center max-w-2xl mx-auto">
@@ -46,7 +44,7 @@ export default function Habitaciones({HabitacionesData, agregarHabitacion, usuar
                         {/* Contenedor de Imagen */}
                         <div className="relative h-72 overflow-hidden">
                             <img 
-                                src={"http://localhost/Proyecto_IA2/hoteleria_Moron/public"+hab.imagen} 
+                                src={urlImage+hab.imagen} 
                                 alt={`image ${hab.titulo}`}
                                 className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
                             />

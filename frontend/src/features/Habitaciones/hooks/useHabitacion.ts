@@ -37,6 +37,14 @@ export default function useHabitacion(){
         }
     }
 
+    const EliminarHabitacion = async(idHabitacion)=>{
+        try {
+            console.log("dest");
+        } catch (error: any) {
+            console.log(error)
+        }
+    }
+
     const ObtenerHabitaciones = async()=>{
         try {
             const habitaciones = await getHabitacionesApi();

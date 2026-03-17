@@ -32,9 +32,6 @@ class HabitacionController extends Controller
         ], 200);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function storehabitacion(Request $request)
     {
         $request->validate([
@@ -63,17 +60,14 @@ class HabitacionController extends Controller
         ], 201);
     }
 
-    /**
-     * Display the specified resource.
-     */
+
     public function showHabitacion(Habitaciones $habitacion)
     {
         return response()->json(["habitacion" => $habitacion]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
+
+
     public function updateHabitacion(Request $request, Habitaciones $habitacion)
     {
         $request->validate([
@@ -101,9 +95,6 @@ class HabitacionController extends Controller
         }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Habitaciones $habitacion)
     {
 

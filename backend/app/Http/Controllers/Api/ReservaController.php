@@ -3,6 +3,9 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\ReservaGeneralResource;
+use App\Http\Resources\ReservaOcupadosResource;
+use App\Http\Resources\ReservaPendientesResource;
 use App\Http\Resources\ReservaResource;
 use App\Models\Habitaciones;
 use App\Models\Reserva;
@@ -15,15 +18,12 @@ use function Symfony\Component\Clock\now;
 
 class ReservaController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function getMisReservaciones(Request $request)
     {
         try {
             $userid = $request->user()->id;
             $misreservas = Reserva::where("user_id", $userid)
-                ->with(["detalles.habitacion.tipohabitacion", "detalles.estado"])
+                ->with(["detalles.habitacion.tipohabitacion"])
                 ->get();
 
             if (!$misreservas->count()) return response()->json(["p" => "esta vacio"]);
@@ -35,22 +35,18 @@ class ReservaController extends Controller
         // return response()->json(["user" => $request->user()]);
     }
 
-
     public function geAllReservaciones()
     {
-        $reservaciones_disponibles = Reserva::where("estado_id", 1)->get();
-        $reservaciones_ocupados = Reserva::where("estado_id", 2)->get();
-
+        // $reservaciones_disponibles = Reserva::where("estado_id", 1)->get();
+        $reservaciones_pendientes = Reserva::where("estado_id", 5)->with(["user"])->get();
+        $reservaciones_ocupados = Reserva::where("estado_id", 2)->with(["user", "detalles.habitacion.tipohabitacion", "detalles.estado"])->get();
         return response()->json([
-            "Disponibles" => $reservaciones_disponibles,
-            "Ocupados" => $reservaciones_ocupados,
-            "estado" => 200,
+            "Pendientes" => ReservaPendientesResource::collection($reservaciones_pendientes),
+            "Ocupados" => ReservaOcupadosResource::collection($reservaciones_ocupados),
         ], 200);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
+
     public function storeReservacion(Request $request)
     {
         Log::info('Datos recibidos en storeReservacion:', $request->all());
@@ -116,17 +112,17 @@ class ReservaController extends Controller
         }
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function showReservaDetalles(Reserva $reserva)
     {
-        //
+        $reserva->load(["detalles" => function ($query) {
+            $query->where("estado_id", 5);
+        }]);
+
+        return response()->json([
+            "reserva" => new ReservaGeneralResource($reserva),
+        ], 200);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function updateReservacionById(Request $request, Reserva $reserva)
     {
         $request->validate([

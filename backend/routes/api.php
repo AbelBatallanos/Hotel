@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\EstadoController;
 use App\Http\Controllers\Api\FacturacionController;
 use App\Http\Controllers\Api\HabitacionController;
 use App\Http\Controllers\Api\ReservaController;
+use App\Http\Controllers\Api\ReservaDetalleController;
 use App\Http\Controllers\Api\TipoHabitacionController;
 use App\Http\Controllers\Api\UserController;
 use App\Models\Habitaciones;
@@ -28,12 +29,18 @@ Route::get("/tiposhabitacion", [TipoHabitacionController::class, "getAll"])->mid
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::get("/reservaciones", [ReservaController::class, "geAllReservaciones"]);
     Route::get("/myreservas", [ReservaController::class, "getMisReservaciones"]);
+    Route::get("/reserva/{reserva}/detalles", [ReservaController::class, "showReservaDetalles"])->name("show.detalles");
 
     Route::post("/reservacion", [ReservaController::class, "storeReservacion"]);
 
     Route::put("/reservacion/{reserva}", [ReservaController::class, "updateReservacionById"])->name("edit.reserva");
 
     Route::delete("/reservacion/{reserva}", [ReservaController::class, "delete"])->name("delete.reserva");
+});
+
+//ReservaDetalles
+Route::middleware(['auth', 'second'])->group(function () {
+    Route::delete('/detalle/{id}', [ReservaDetalleController::class, "destroy"]);
 });
 
 //Habitaciones

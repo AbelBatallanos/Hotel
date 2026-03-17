@@ -1,11 +1,19 @@
 import { useState } from "react";
 import type { TReservacion } from "../../../types";
-import {CrearReservaApi, getAllMisReservasApi} from "../services/reserva.service"
-import type { ErrorHabitacionesOcupadasT, TReservas } from "../types";
+
+import {CrearReservaApi, deleteDetallePorIdDetalle, getAllMisReservasApi, getAllReservacionesApi,  getDetallesPorIdReservaApi} from "../services/reserva.service"
+
+import type { ErrorHabitacionesOcupadasT, TReservaConfirmacion, TReservas, TReservasOcupadas, TReservasPendientes } from "../types";
+
+interface IreservasGenerales {
+    Pendientes: TReservasPendientes[] , Ocupados: TReservasOcupadas[],
+}
 
 export default function useReserva(){
     const [Reservaciones, setReservaciones] = useState( [] as TReservas[]);
     const [ErrorHabitacionesOcupadas, setErrorHabitacionesOcupadas] = useState<ErrorHabitacionesOcupadasT>({} as ErrorHabitacionesOcupadasT);
+    const [reservasGenerales, setReservasGenerales] = useState<IreservasGenerales>({} as IreservasGenerales);
+    const [reservaDetalles, setReservaDetalles] = useState<TReservaConfirmacion>({} as TReservaConfirmacion);
 
 
     const ObtenerMisReservaciones = async()=>{
@@ -38,10 +46,46 @@ export default function useReserva(){
         }
     }
 
+    const EliminarDetalle = async(idDetalle)=>{
+        try {
+            // const r = await deleteDetallePorIdDetalle(idDetalle);
+            console.log(idDetalle);
+        } catch (error:any) {
+            console.log(error)
+        }
+    }
+
+
+    const ObtenerReservasGenerales = async()=> {
+        try {
+            const r = await getAllReservacionesApi();
+            console.log(r.data);
+            setReservasGenerales(r.data);
+        } catch (error: any) {
+            console.log(error)
+        }
+    }
+
+    const ObtenerDetallesPorIdReserva = async(idReserva: string)=>{
+        try {
+            console.log(idReserva + " ID")
+            const r = await getDetallesPorIdReservaApi(idReserva);
+            console.log(r.data)
+            setReservaDetalles(r.data.reserva);
+        } catch (error: any) {
+            console.log(error)
+        }
+    }
+
     return{
         Reservaciones,
+        reservaDetalles,
+        reservasGenerales,
         ErrorHabitacionesOcupadas,
         CrearReserva,
         ObtenerMisReservaciones,
+        ObtenerReservasGenerales,
+        ObtenerDetallesPorIdReserva,
+        EliminarDetalle,
     }
 }

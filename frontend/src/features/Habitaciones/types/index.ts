@@ -24,13 +24,13 @@ export type TiposHabitacionT = {
 }
 
 export type THabitaciones = {
-    "id" : string,
+    "id" : string | number,
     "codigo": string,
-    "titulo" : string,
-    "descripcion": string,
-    "capacidad": string,
+    "titulo"? : string | null,
+    "descripcion": string | null,
+    "capacidad": string | number,
     "estado": string,
     "imagen": string,
     "tipo_habitacion": string,
-    "precio": string,
+    "precio": string | number,
 }

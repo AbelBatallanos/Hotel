@@ -3,6 +3,7 @@ import useReserva from "../hook/useReserva"
 import {MagnifyingGlassIcon, CalendarIcon, ChevronDownIcon, ChevronUpIcon, ArrowLongRightIcon, } from "@heroicons/react/24/outline"
 import { BuildingOfficeIcon, CheckCircleIcon, ClockIcon, CreditCardIcon, InformationCircleIcon, UsersIcon } from "@heroicons/react/24/solid";
 import { NavLink } from "react-router-dom";
+import { urlImage } from "../../../api/axios";
 
 
 export default function MisReservasPage(){
@@ -89,8 +90,8 @@ export default function MisReservasPage(){
                             {reserva.detalles.map((detalle, idx) => (
                             <div key={idx} className="bg-white p-4 rounded-3xl border border-slate-100 flex flex-col sm:flex-row gap-6 shadow-sm">
                                 <img 
-                                src={"http://localhost/Proyecto_IA2/hoteleria_Moron/public"+detalle.habitacion.imagen} 
-                                alt={detalle.habitacion.titulo}
+                                src={urlImage+detalle.habitacion.imagen} 
+                                alt={detalle.habitacion.titulo?? ""}
                                 className="w-full sm:w-32 h-24 object-cover rounded-2xl"
                                 />
                                 <div className="flex-1">

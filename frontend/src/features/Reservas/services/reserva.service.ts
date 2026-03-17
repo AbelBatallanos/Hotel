@@ -15,3 +15,12 @@ export const CrearReservaApi = async(reserva:TReservacion )=>{
 export const getAllReservacionesApi = async()=>{
     return await api.get("/reservaciones");
 }
+
+export const getDetallesPorIdReservaApi = async(idReserva:string)=>{
+    return await api.get(`/reserva/${idReserva}/detalles`);
+}
+
+export const deleteDetallePorIdDetalle = async(idDetalle)=>{
+    return await api.delete(`/detalle/${idDetalle}`);
+}
+

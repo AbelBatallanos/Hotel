@@ -1,6 +1,7 @@
 import useReserva from "../hook/useReserva";
 import {CreditCardIcon, CalendarDaysIcon, BuildingOfficeIcon,UsersIcon, ExclamationCircleIcon, TrashIcon} from "@heroicons/react/24/solid"
 import useAppStore from "../../../store/appStore"
+import { urlImage } from "../../../api/axios";
 
 
 export default function CrearReserva(){
@@ -75,7 +76,7 @@ export default function CrearReserva(){
                       {ErrorHabitacionesOcupadas.error && ErrorHabitacionesOcupadas.ocupadas.some( ocupado => ocupado.codigo === hab.codigo) && (<div className="absolute bg-red-200/50 inset-0 z-10  flex items-center justify-center"><p className="text-center text-lime-800 sm:text-2xl lg:text-3xl font-bold uppercase">habitación Ocupada</p></div>)}
                       {/* Imagen con badge de precio */}
                       <div className="relative w-40 h-32 z-0 shrink-0 overflow-hidden rounded-2xl shadow-inner bg-slate-100">
-                        <img src={"http://localhost/Proyecto_IA2/hoteleria_Moron/public"+hab.imagen} alt={hab.titulo} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+                        <img src={urlImage+hab.imagen} alt={hab.titulo} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
                         <div className="absolute top-2 left-2 bg-slate-900/80 backdrop-blur-md text-white px-2 py-1 rounded-lg text-[10px] font-bold">
                           {hab.codigo}
                         </div>
