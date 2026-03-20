@@ -11,12 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('tipos_habitacion', function (Blueprint $table) {
+        Schema::create('empleados', function (Blueprint $table) {
             $table->id();
-            $table->string("nombre");
-            $table->text("amenities");
-            $table->integer("capacidad");
-            $table->integer("tipo_cama");
+            $table->dateTime("fecha_contratacion");
+            $table->integer("sueldo");
+            $table->foreignId("id_user")->references("id")->on("users");
+            $table->foreignId("id_turno")->references("id")->on("turnos");
+            $table->text("historial_notas");
             $table->timestamps();
             $table->softDeletes();
         });
@@ -27,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('tipos_habitacion');
+        Schema::dropIfExists('empleados');
     }
 };

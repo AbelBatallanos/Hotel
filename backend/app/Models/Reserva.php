@@ -9,7 +9,7 @@ class Reserva extends Model
 {
     use SoftDeletes;
 
-    protected $fillable = ["total", "fecha_ini", "fecha_fin", "user_id", "estado_id"];
+    protected $fillable = ["origen_reserva", "codigo_promocion", "descuento_monto", "total", "fecha_ini", "fecha_fin", "id_recepcion", "id_cliente", "estado_id"];
 
     public function user()
     {

@@ -13,6 +13,9 @@ return new class extends Migration
     {
         Schema::create('servicios', function (Blueprint $table) {
             $table->id();
+            $table->string("nombre");
+            $table->integer("costo_unit");
+            $table->foreignId("id_departamento")->constrained()->onDelete("cascade");
             $table->timestamps();
         });
     }

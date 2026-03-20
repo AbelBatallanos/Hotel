@@ -13,11 +13,15 @@ return new class extends Migration
     {
         Schema::create('reservas', function (Blueprint $table) {
             $table->id();
+            $table->string("origen_reserva");
+            $table->string("codigo_promocion");
+            $table->string("descuento_monto");
             $table->integer("total");
             $table->date("fecha_ini");
             $table->date("fecha_fin");
 
-            $table->foreignId("user_id")->constrained();
+            $table->foreignId("id_recepcion")->references("id")->on("users");
+            $table->foreignId("id_cliente")->references("id")->on("users");
             $table->foreignId("estado_id")->constrained();
             $table->timestamps();
             $table->softDeletes();

@@ -11,9 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('proveedors', function (Blueprint $table) {
+        Schema::create('turnos', function (Blueprint $table) {
             $table->id();
+            $table->string("descripcion");
+            $table->time("hora_entrada");
+            $table->time("hora_salida");
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
@@ -22,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('proveedors');
+        Schema::dropIfExists('turnos');
     }
 };

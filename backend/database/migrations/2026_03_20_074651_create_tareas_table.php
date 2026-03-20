@@ -11,22 +11,20 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('tipos_habitacion', function (Blueprint $table) {
+        Schema::create('tareas', function (Blueprint $table) {
             $table->id();
-            $table->string("nombre");
-            $table->text("amenities");
-            $table->integer("capacidad");
-            $table->integer("tipo_cama");
+            $table->text("descripcion");
+            $table->dateTime("fecha_creada");
+            $table->dateTime("fecha_limite");
+            $table->foreignId("id_empleado")->references("id")->on("empleados");
+            $table->foreignId("id_estado")->references("id")->on("estados");
             $table->timestamps();
             $table->softDeletes();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
-        Schema::dropIfExists('tipos_habitacion');
+        Schema::dropIfExists('tareas');
     }
 };
