@@ -13,11 +13,11 @@ return new class extends Migration
     {
         Schema::create('empleados', function (Blueprint $table) {
             $table->id();
-            $table->dateTime("fecha_contratacion");
-            $table->integer("sueldo");
-            $table->foreignId("id_user")->references("id")->on("users");
-            $table->foreignId("id_turno")->references("id")->on("turnos");
-            $table->text("historial_notas");
+            $table->dateTime("fechahora_contratacion");
+            $table->decimal("sueldo", 8, 2);
+            $table->foreignId("id_user")->constrained("users");
+            $table->foreignId("id_turno")->constrained("turnos");
+            $table->text("historial_notas")->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

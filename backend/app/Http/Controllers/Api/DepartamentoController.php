@@ -15,13 +15,14 @@ class DepartamentoController extends Controller
 
         return response()->json(["departamentos" => $dptos], 200);
     }
+
     public function store(Request $request)
     {
         $request->validate([
             "nombre" => "required|max:50|unique:departamento,nombre"
         ]);
 
-        Departamento::created([
+        Departamento::create([
             "nombre" => $request->nombre,
         ]);
 
@@ -31,7 +32,7 @@ class DepartamentoController extends Controller
     public function update($id, Request $request)
     {
         $request->validate([
-            "nombre" => "sometimes|string|min:2"
+            "nombre" => "sometimes|string|unique:departamento,nombre|min:2"
         ]);
         try {
             if ($request->has("nombre")) {
