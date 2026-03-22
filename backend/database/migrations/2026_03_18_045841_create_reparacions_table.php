@@ -11,22 +11,43 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('reparacions', function (Blueprint $table) {
+        Schema::create('reparaciones', function (Blueprint $table) {
             $table->id();
             $table->text("detalle_averia");
-            $table->integer("costo_reparacion");
-            $table->datetimes("fecha_reporte");
-            $table->datetimes("fecha_resolucion");
-            $table->foreignId("id_habitacion")->references("id")->on("habitaciones");
-            $table->foreignId("id_empleado")->references("id")->on("empleados")->default(NULL);
-            $table->foreignId("id_proveedor")->references("id")->on("proveedores")->default(NULL);
-            $table->foreignId("id_estado")->references("id")->on("estados");
+            $table->decimal("costo_reparacion", 10, 2);
+            $table->dateTime("fecha_reporte");
+            $table->dateTime("fecha_resolucion");
+
+            $table->foreignId("id_habitacion")
+                ->constrained("habitaciones")
+                ->onDelete("cascade")
+                ->onUpdate("cascade");
+
+            $table->foreignId("id_empleado")
+                ->nullable()
+                ->constrained("empleados")
+                ->onDelete("set null");
+
+            $table->foreignId("id_proveedor")
+                ->nullable()
+                ->constrained("proveedores")
+                ->onDelete("set null");
+
+            $table->foreignId("id_estado")
+                ->constrained("estados")
+                ->onDelete("cascade")
+                ->onUpdate("cascade");
             $table->timestamps();
+
+            $table->index("id_habitacion");
+            $table->index("id_estado");
+            $table->index("id_empleado");
+            $table->index("id_proveedor");
         });
     }
 
     public function down(): void
     {
-        Schema::dropIfExists('reparacions');
+        Schema::dropIfExists('reparaciones');
     }
 };

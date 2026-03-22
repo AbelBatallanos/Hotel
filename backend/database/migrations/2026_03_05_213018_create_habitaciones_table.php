@@ -13,12 +13,15 @@ return new class extends Migration
     {
         Schema::create('habitaciones', function (Blueprint $table) {
             $table->id();
-            $table->string("num_habitacion");
+            $table->string("num_habitacion", 10)->unique();
             $table->string("imagen");
             $table->foreignId("id_tipo_habitacion")->constrained("tipos_habitacion");
             $table->foreignId("id_estado")->constrained("estados");
             $table->timestamps();
             $table->softDeletes();
+
+            $table->index("id_tipo_habitacion");
+            $table->index("id_estado");
         });
     }
 

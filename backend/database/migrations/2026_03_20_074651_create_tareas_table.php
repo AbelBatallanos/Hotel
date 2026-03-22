@@ -16,10 +16,14 @@ return new class extends Migration
             $table->text("descripcion");
             $table->dateTime("fecha_creada");
             $table->dateTime("fecha_limite");
-            $table->foreignId("id_empleado")->references("id")->on("empleados");
-            $table->foreignId("id_estado")->references("id")->on("estados");
+            $table->foreignId("id_empleado")->constrained("empleados");
+            $table->foreignId("id_estado")->constrained("estados");
             $table->timestamps();
             $table->softDeletes();
+
+            $table->index(["fecha_creada", "fecha_limite"]);
+            $table->index("id_empleado");
+            $table->index("id_estado");
         });
     }
 

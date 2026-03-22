@@ -25,6 +25,11 @@ return new class extends Migration
             $table->foreignId("rol_id")->constrained("roles");
             $table->rememberToken();
             $table->timestamps();
+
+            $table->index("name");
+            $table->index("lastname");
+            $table->index("ci");
+            $table->index("rol_id");
         });
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {

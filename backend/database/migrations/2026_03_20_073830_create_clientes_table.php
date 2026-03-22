@@ -20,12 +20,12 @@ return new class extends Migration
 
             $table->timestamps();
             $table->softDeletes();
+
+            $table->index("id_user");
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
+
     public function down(): void
     {
         Schema::dropIfExists('clientes');

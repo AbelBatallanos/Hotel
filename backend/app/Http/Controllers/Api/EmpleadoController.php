@@ -29,7 +29,6 @@ class EmpleadoController extends Controller
             "password" => "required|string",
             "rol_id" => "required|exists:roles,id",
 
-
             "id_turno" => "required|exists:turnos,id",
             "sueldo" => "required|numeric",
             "historial_notas" => "sometimes|string"
@@ -64,6 +63,17 @@ class EmpleadoController extends Controller
             if ($request->has("historial_notas")) $empleado->historial_notas = $request->historial_notas;
 
             $empleado->save();
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
+        return;
+    }
+
+    public function destroy($id)
+    {
+        try {
+            $empleado = Empleado::findOrFail($id);
+            $empleado->delete();
         } catch (\Throwable $th) {
             //throw $th;
         }

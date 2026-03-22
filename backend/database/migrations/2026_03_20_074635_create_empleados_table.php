@@ -20,6 +20,10 @@ return new class extends Migration
             $table->text("historial_notas")->nullable();
             $table->timestamps();
             $table->softDeletes();
+
+            $table->index("id_user");
+            $table->index("id_turno");
+            $table->index("fechahora_contratacion");
         });
     }
 

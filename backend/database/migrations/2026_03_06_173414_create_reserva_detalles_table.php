@@ -13,17 +13,19 @@ return new class extends Migration
     {
         Schema::create('reserva_detalles', function (Blueprint $table) {
             $table->id();
-            $table->integer("subtotal");
-            $table->foreignId("reserva_id")->references("id")->on("reservas")->onDelete("cascade");
+            $table->decimal("subtotal", 10, 2);
+            $table->foreignId("reserva_id")->constrained("reservas")->onDelete("cascade");
             $table->foreignId("habitacion_id")->constrained("habitaciones");
             $table->foreignId("estado_id")->constrained();
             $table->timestamps();
             $table->softDeletes();
+
+            $table->index("reserva_id");
+            $table->index("habitacion_id");
+            $table->index("estado_id");
         });
     }
-    /**
-     * Reverse the migrations.
-     */
+
     public function down(): void
     {
         Schema::dropIfExists('reserva_detalles');

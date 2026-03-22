@@ -17,6 +17,8 @@ return new class extends Migration
             $table->integer("costo_unit");
             $table->foreignId("id_departamento")->constrained()->onDelete("cascade");
             $table->timestamps();
+
+            $table->index("id_departamento");
         });
     }
 

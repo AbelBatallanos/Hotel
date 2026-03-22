@@ -13,18 +13,29 @@ return new class extends Migration
     {
         Schema::create('reservas', function (Blueprint $table) {
             $table->id();
-            $table->string("origen_reserva");
-            $table->string("codigo_promocion");
-            $table->string("descuento_monto");
-            $table->integer("total");
+            $table->string("origen_reserva", 25);
+            $table->string("codigo_promocion", 30)->nullable();
+            $table->decimal("descuento_monto", 10, 2)->default(0);
+            $table->decimal("total", 10, 2);
             $table->date("fecha_ini");
             $table->date("fecha_fin");
 
-            $table->foreignId("id_recepcion")->references("id")->on("users");
-            $table->foreignId("id_cliente")->references("id")->on("users");
-            $table->foreignId("estado_id")->constrained();
+            $table->foreignId("id_recepcion")
+                ->nullable()
+                ->constrained("users")
+                ->onDelete("set null");
+
+            $table->foreignId("id_cliente")
+                ->constrained("users")
+                ->onDelete("cascade");
+
+            $table->foreignId("estado_id")->constrained()->onDelete("cascade");
             $table->timestamps();
             $table->softDeletes();
+
+            $table->index(["fecha_ini", "fecha_fin"]);
+            $table->index("id_recepcion");
+            $table->index("id_cliente");
         });
     }
 
