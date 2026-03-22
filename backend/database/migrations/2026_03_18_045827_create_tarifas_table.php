@@ -13,10 +13,10 @@ return new class extends Migration
     {
         Schema::create('tarifas', function (Blueprint $table) {
             $table->id();
-            $table->date("fecha_ini");
-            $table->date("fecha_fin");
-            $table->foreignId("id_tipo_habitacion")->constrained()->onDelete("cascade");
-            $table->decimal("precio", 10, 2);
+            $table->date("fecha_ini")->nullable();
+            $table->date("fecha_fin")->nullable();
+            $table->foreignId("id_tipo_habitacion")->constrained("tipos_habitacion")->onDelete("cascade");
+            $table->decimal("precio", 10, 2)->default(0);
             $table->timestamps();
 
             $table->index("fecha_ini");

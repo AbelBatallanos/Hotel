@@ -8,14 +8,26 @@ use Illuminate\Support\Facades\Log;
 
 class TareaController extends Controller
 {
+    public function listarTareas()
+    {
+        try {
+
+            return response()->json([]);
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
+    }
+
+
+
     public function asignarTarea(Request $request)
     {
         Log::info('Entrando al método asignarTarea', ['request' => $request->all()]);
         $request->validate([
             "descripcion" => "required|string",
             "fecha_limite" => "required",
-            "empleado" => "required|exist:empleado,id",
-            "estado" => "required|exist:estado,id",
+            "id_empleado" => "required|exists:empleado,id",
+            "id_estado" => "required|exists:estado,id",
         ]);
 
         try {

@@ -27,6 +27,8 @@ class DatabaseSeeder extends Seeder
             RolesSeeder::class,
             EstadosSeeder::class,
             TiposHabitacionSeeder::class,
+            TurnosSeeder::class,
+            UsersSeeder::class,
             // Agregamos un usuario administrador por defecto para pruebas
 
         ]);

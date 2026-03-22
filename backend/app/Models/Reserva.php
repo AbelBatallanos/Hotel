@@ -25,4 +25,9 @@ class Reserva extends Model
     {
         return $this->hasMany(ReservaDetalle::class, "reserva_id");
     }
+
+    public function consumos()
+    {
+        return $this->morphMany(Consumo::class, "consumible");
+    }
 }

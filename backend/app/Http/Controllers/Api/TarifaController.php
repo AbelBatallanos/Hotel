@@ -29,4 +29,8 @@ class TarifaController extends Controller
         }
         return;
     }
+
+    public function update($id, Request $request){
+        
+    }
 }

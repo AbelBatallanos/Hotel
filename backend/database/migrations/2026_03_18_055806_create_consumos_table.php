@@ -13,8 +13,15 @@ return new class extends Migration
     {
         Schema::create('consumos', function (Blueprint $table) {
             $table->id();
+            $table->decimal("subtotal", 10, 2);
+            $table->integer("cantidad");
+            $table->foreignId("id_servicio")->constrained("servicios")->onUpdate("cascade");
+            $table->morphs("consumible"); //polimorfismo
+            $table->dateTime("fechaHora_creacion");
             $table->timestamps();
             $table->softDeletes();
+
+            $table->index("id_servicio");
         });
     }
 

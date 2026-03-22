@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string("nombre");
             $table->integer("costo_unit");
-            $table->foreignId("id_departamento")->constrained()->onDelete("cascade");
+            $table->foreignId("id_departamento")->constrained("departamentos")->onDelete("cascade");
             $table->timestamps();
 
             $table->index("id_departamento");

@@ -13,10 +13,10 @@ return new class extends Migration
     {
         Schema::create('clientes', function (Blueprint $table) {
             $table->id();
-            $table->foreignId("id_user")->constrained();
-            $table->json("preferencias");
-            $table->integer("puntos_acumulados");
-            $table->text("nivel_fidelidad");
+            $table->foreignId("id_user")->constrained("users")->onDelete("cascade");
+            $table->json("preferencias")->nullable();
+            $table->integer("puntos_acumulados")->default(0);
+            $table->text("nivel_fidelidad")->nullable();
 
             $table->timestamps();
             $table->softDeletes();
