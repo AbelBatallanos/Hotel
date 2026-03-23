@@ -17,10 +17,12 @@ return new class extends Migration
             $table->date("fecha_fin")->nullable();
             $table->foreignId("id_tipo_habitacion")->constrained("tipos_habitacion")->onDelete("cascade");
             $table->decimal("precio", 10, 2)->default(0);
+            $table->boolean("activo")->default(true);
             $table->timestamps();
 
             $table->index("fecha_ini");
             $table->index("fecha_fin");
+            $table->index("id_tipo_habitacion");
         });
     }
 

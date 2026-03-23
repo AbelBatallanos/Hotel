@@ -13,7 +13,7 @@ class EstadosSeeder extends Seeder
      */
     public function run(): void
     {
-        $estados = ['Disponible', 'Ocupada', 'Mantenimiento', 'Sucia', 'Pendiente', 'Pagado', 'Cancelado'];
+        $estados = ['Disponible', 'Ocupada', 'Mantenimiento', 'Limpieza', 'Pendiente', 'Pagado', 'Cancelado', 'Realizado'];
 
         foreach ($estados as $estado) {
             Estados::create(['nombre' => $estado]);

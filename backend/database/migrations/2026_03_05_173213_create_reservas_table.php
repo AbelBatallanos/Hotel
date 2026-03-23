@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('reservas', function (Blueprint $table) {
             $table->id();
             $table->string("origen_reserva", 25);
-            $table->string("codigo_promocion", 30)->nullable();
-            $table->decimal("descuento_monto", 10, 2)->default(0);
+            // $table->string("codigo_promocion", 30)->nullable();
+            // $table->decimal("descuento_monto", 10, 2)->default(0);
             $table->decimal("total", 10, 2);
             $table->date("fecha_ini");
             $table->date("fecha_fin");

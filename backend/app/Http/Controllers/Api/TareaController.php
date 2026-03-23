@@ -11,14 +11,11 @@ class TareaController extends Controller
     public function listarTareas()
     {
         try {
-
+            $tareas = Tarea::with([""])->where("id_estado",)->get();
             return response()->json([]);
         } catch (\Throwable $th) {
-            //throw $th;
         }
     }
-
-
 
     public function asignarTarea(Request $request)
     {
@@ -27,17 +24,18 @@ class TareaController extends Controller
             "descripcion" => "required|string",
             "fecha_limite" => "required",
             "id_empleado" => "required|exists:empleado,id",
-            "id_estado" => "required|exists:estado,id",
+
         ]);
 
         try {
-            Tarea::create([
+            $tarea = Tarea::create([
                 "descripcion" => $request->descripcion,
                 "fecha_limite" => $request->fecha_limite,
                 "id_empleado" => $request->empleado,
-                "id_estado" => $request->estado,
+                "id_estado" => 5,
             ]);
-            Log::info('Tarea creada correctamente', ['empleado' => $request->empleado]);
+            Log::info('Tarea creada correctamente', ['tarea' => $tarea]);
+            return response()->json(["tarea" => $tarea], 201);
         } catch (\Throwable $th) {
             Log::error('Error al asignar tarea', [
                 'mensaje' => $th->getMessage(),
@@ -69,6 +67,7 @@ class TareaController extends Controller
 
             $tarea->save();
             Log::info('Tarea actualizada correctamente', ['id' => $id]);
+            return response()->json(["message" => "Tarea Actualizada con Exito!.."], 200);
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
             Log::warning('Intento de eliminar tarea inexistente', ['id' => $id]);
         } catch (\Throwable $th) {
@@ -85,8 +84,12 @@ class TareaController extends Controller
         Log::info('Entrando al método deleteTarea', ['id' => $id]);
         try {
             $tarea = Tarea::findOrFail($id);
-
+            $tarea->id_estado = 7;
+            $tarea->updated_at = now();
+            $tarea->save();
             $tarea->delete();
+            Log::info('Tarea eliminada correctamente', ['id' => $id]);
+            return response()->json(["message" => "Tarea Eliminada con Exito!.."], 200);
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
             Log::warning('Intento de eliminar tarea inexistente', ['id' => $id]);
         } catch (\Throwable $th) {
