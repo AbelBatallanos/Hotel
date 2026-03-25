@@ -1,15 +1,21 @@
 <?php
 
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\DepartamentoController;
 use App\Http\Controllers\Api\EstadoController;
 use App\Http\Controllers\Api\FacturacionController;
+use App\Http\Controllers\Api\FavoritoController;
 use App\Http\Controllers\Api\HabitacionController;
+use App\Http\Controllers\Api\ProveedorController;
+use App\Http\Controllers\Api\ReparacionController;
 use App\Http\Controllers\Api\ReservaController;
 use App\Http\Controllers\Api\ReservaDetalleController;
 use App\Http\Controllers\Api\RolController;
+use App\Http\Controllers\Api\ServicioController;
+use App\Http\Controllers\Api\TarifaController;
 use App\Http\Controllers\Api\TipoHabitacionController;
 use App\Http\Controllers\Api\UserController;
-use App\Http\Controllers\TareaController;
+use App\Http\Controllers\Api\TareaController;
 use App\Models\Habitaciones;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -54,7 +60,7 @@ Route::middleware(['auth:sanctum', 'role:'])->group(function () {
 });
 
 //Habitaciones
-Route::middleware(['auth:sanctum'])->group(function () {
+Route::middleware(['auth:sanctum', "role:admin"])->group(function () {
     Route::get("/habitaciones", [HabitacionController::class, "getAllHabitaciones"])->name("getAll.Habitaciones");
     Route::get("/habitacion/{habitacion}", [HabitacionController::class, "showHabitacion"])->middleware("role:cliente|recepcionista")->name("show.habitacion");
 
@@ -70,7 +76,7 @@ Route::middleware(['auth:sanctum', 'role:recepcionista|admin'])->group(function 
 });
 
 //Tareas
-Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
+Route::middleware(['auth:sanctum'])->group(function () {
     Route::post("/tarea/store", [TareaController::class, "asignarTarea"])->name("store.tarea");
     Route::put("/tarea/{id}", [TareaController::class, "updateTarea"])->name("upd.tarea");
     Route::delete("/tarea/{id}", [TareaController::class, "deleteTarea"])->name("delete.tarea");
@@ -78,51 +84,56 @@ Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
 
 //Favoritos
 Route::middleware(['auth:sanctum', 'role:cliente'])->group(function () {
-    Route::get("", [])->name("");
-    Route::get("", [])->name("");
-    Route::get("", [])->name("");
+    Route::get("/misfavorito", [FavoritoController::class, "misFavoritos"])->name("");
+    Route::get("/favorito", [FavoritoController::class, "store"])->name("");
+    Route::get("/favorito/{id}", [FavoritoController::class, "destroy"])->name("");
 });
 
 //Reparaciones
-Route::middleware(['auth:sanctum', 'role:'])->group(function () {
-    Route::get("", [])->name("");
-    Route::get("", [])->name("");
-    Route::get("", [])->name("");
+Route::middleware(['auth:sanctum', 'role:admin|recepcionista'])->group(function () {
+    Route::get("/reparaciones", [ReparacionController::class, "verReparaciones"]);
+    Route::post("/reparaciones", [ReparacionController::class, "store"])->name("store.reparacion");
+    Route::put("/finalizarreparacion/{id}", [ReparacionController::class, "TerminarReparacion"])->name("upd.reparacion");
+    Route::put("/elegirreparacion", [ReparacionController::class, "reclamarReparacion"]);
 });
 
 //Servicios
-Route::middleware(['auth:sanctum', 'role:'])->group(function () {
-    Route::get("", [])->name("");
-    Route::get("", [])->name("");
-    Route::get("", [])->name("");
+Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
+    Route::get("servicios", [ServicioController::class, "index"])->name("index.servicio");
+    Route::post("servico", [ServicioController::class, "store"])->name("store.servicio");
+    Route::put("servicio/{id}", [ServicioController::class, "update"])->name("upd.servicio");
+    Route::delete("servicio/{id}", [ServicioController::class, "destroy"])->name("destroy.servicio");
 });
 
 //Tarifas
-Route::middleware(['auth:sanctum', 'role:'])->group(function () {
-    Route::get("", [])->name("");
-    Route::get("", [])->name("");
-    Route::get("", [])->name("");
+Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
+    Route::get("/tarifas", [TarifaController::class, "index"])->name("");
+    Route::post("/tarifa", [TarifaController::class, "storeNuevaTarifa"])->name("");
+    Route::put("/tarifa/{id}", [TarifaController::class, "update"])->name("");
 });
 
 //TipoHabitacion
-Route::middleware(['auth:sanctum', 'role:'])->group(function () {
-    Route::get("", [])->name("");
-    Route::get("", [])->name("");
-    Route::get("", [])->name("");
+Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
+    Route::get("/tiposhabitacion", [TipoHabitacionController::class, "getAll"])->name("");
+    Route::get("/tipohab", [TipoHabitacionController::class, "store"])->name("");
+    Route::get("/tipohab/{id}", [TipoHabitacionController::class, "update"])->name("");
+    Route::get("/tipohab/{id}", [TipoHabitacionController::class, "destroy"])->name("");
 });
 
 //Proveedores
 Route::middleware(['auth:sanctum', 'role:'])->group(function () {
-    Route::get("", [])->name("");
-    Route::get("", [])->name("");
-    Route::get("", [])->name("");
+    Route::get("proveedores", [ProveedorController::class, "index"])->name("");
+    Route::get("proveedor", [ProveedorController::class, "store"])->name("");
+    Route::get("proveedor/{id}", [ProveedorController::class, "update"])->name("");
+    Route::get("proveedor/{id}", [ProveedorController::class, "destroy"])->name("");
 });
 
 //Departamentos
-Route::middleware(['auth:sanctum', 'role:'])->group(function () {
-    Route::get("", [])->name("");
-    Route::get("", [])->name("");
-    Route::get("", [])->name("");
+Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
+    Route::get("departamentos", [DepartamentoController::class, "index"])->name("");
+    Route::get("departamento", [DepartamentoController::class, "store"])->name("");
+    Route::get("departamento/{id}", [DepartamentoController::class, "update"])->name("");
+    Route::get("departamento/{id}", [DepartamentoController::class, "destroy"])->name("");
 });
 
 Route::middleware(['auth:sanctum', 'role:admin'])

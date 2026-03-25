@@ -49,7 +49,6 @@ class TarifaController extends Controller
             }
         });
 
-
         try {
             Tarifa::create([
                 "fecha_ini" => $request->fecha_ini,

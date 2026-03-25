@@ -9,16 +9,26 @@ use Illuminate\Http\Request;
 class FavoritoController extends Controller
 {
 
+    public function misFavoritos(Request $request)
+    {
+        $cliente = $request->user()->cliente()->id;
+
+        $favoritos = Favorito::where("id_user", $cliente)->get();
+
+        return response()->json(["favoritos" => $favoritos]);
+    }
+
+
     public function store(Request $request)
     {
-        $user = $request->user();
+        $cliente = $request->user()->cliente()->id;
         $request->validate([
             "id_habitacion" => "required|exists:habitaciones,id",
         ]);
         try {
             Favorito::create([
                 "id_habitacion" => $request->id_habitacion,
-                "id_user" => $user->id,
+                "id_user" => $cliente,
             ]);
         } catch (\Throwable $th) {
             //throw $th;

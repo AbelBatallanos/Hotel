@@ -29,7 +29,7 @@ class ServicioController extends Controller
             "id_departamento" => $request->id_dpto,
 
         ]);
-        return;
+        return response()->json(["message" => "Servicio Creado Con exito!.."]);
     }
 
     public function update($id, Request $request)

@@ -48,7 +48,7 @@ class ReparacionController extends Controller
         return;
     }
 
-    public function update($id, UpdateReparacionRequest $request, ReparacionService $service)
+    public function TerminarReparacion($id, UpdateReparacionRequest $request, ReparacionService $service)
     {
         $user = $request->user();
 
