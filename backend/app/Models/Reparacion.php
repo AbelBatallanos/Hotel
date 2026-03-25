@@ -19,6 +19,12 @@ class Reparacion extends Model
         "id_estado"
     ];
 
+    protected $casts = [
+        'costo_reparacion' => 'decimal:2',
+        'fecha_reporte' => 'datetime',
+        'fecha_resolucion' => 'datetime',
+    ];
+
     public function proveedor()
     {
         return $this->belongsTo(Proveedor::class, "id_proveedor");

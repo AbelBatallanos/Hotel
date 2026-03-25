@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id();
             $table->decimal("subtotal", 10, 2);
             $table->foreignId("reserva_id")->constrained("reservas")->onDelete("cascade");
-            $table->foreignId("habitacion_id")->constrained("habitaciones");
-            $table->foreignId("estado_id")->constrained();
+            $table->foreignId("habitacion_id")->constrained("habitaciones")->onUpdate("cascade");
+            $table->foreignId("estado_id")->constrained("estados");
             $table->timestamps();
             $table->softDeletes();
 

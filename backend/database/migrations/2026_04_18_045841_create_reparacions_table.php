@@ -16,7 +16,7 @@ return new class extends Migration
             $table->text("detalle_averia");
             $table->decimal("costo_reparacion", 10, 2);
             $table->dateTime("fecha_reporte");
-            $table->dateTime("fecha_resolucion");
+            $table->dateTime("fecha_resolucion")->nullable();
 
             $table->foreignId("id_habitacion")
                 ->constrained("habitaciones")

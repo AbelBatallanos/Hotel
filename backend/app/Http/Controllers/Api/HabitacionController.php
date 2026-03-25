@@ -19,7 +19,8 @@ class HabitacionController extends Controller
      */
     public function index()
     {
-        //
+        $habitaciones = Habitaciones::get();
+        return response()->json(["habitaciones" => $habitaciones]);
     }
 
     public function getAllHabitaciones()

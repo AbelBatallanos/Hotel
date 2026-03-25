@@ -11,11 +11,23 @@ class TareaController extends Controller
     public function listarTareas()
     {
         try {
-            $tareas = Tarea::with([""])->where("id_estado",)->get();
-            return response()->json([]);
+            $tareas = Tarea::with(["empleado", "estado"])->where("id_estado", 5)->get();
+            if (!$tareas) return response()->json(["message" => "No Existen Tareas Pendientes Registradas, Cree una nueva Tarea"], 404);
+            return response()->json(["tareas" => $tareas], 200);
         } catch (\Throwable $th) {
         }
     }
+
+    public function MisTareas(Request $request)
+    {
+        $user = $request->user();
+
+        $tareas = Tarea::where("id_empleado", $user->id)->where("id_estado", 5)->get();
+
+        if (!$tareas) return response()->json(["message" => "No Cuentas con Tareas Pendientes"], 404);
+        return response()->json(["tarea" => $tareas], 200);
+    }
+
 
     public function asignarTarea(Request $request)
     {

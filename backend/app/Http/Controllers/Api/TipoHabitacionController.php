@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\TiposHabitacion\StoreTiposHabitacionRequest;
 use App\Http\Resources\TipoHabitacionResource;
 use App\Models\TiposHabitacion;
 use Illuminate\Http\Request;
@@ -15,21 +16,20 @@ class TipoHabitacionController extends Controller
         return TipoHabitacionResource::collection(TiposHabitacion::all());
     }
 
-    public function store(Request $request)
+    public function store(StoreTiposHabitacionRequest $request)
     {
-        $request->validate([
-            "tipo_cama" => "required|string",
-            "amenities" => "required|string",
-            "capacidad" => "required|numeric",
-            "nombre" => "required|string",
-            "precio_base" => "required|numeric",
+        $data = $request->validated();
 
-        ]);
 
         try {
             TiposHabitacion::create([
-                ""
+                "tipo_cama" => $data["tipo_cama"],
+                "amenities" => $data["amenities"],
+                "capacidad" => $data["capacidad"],
+                "nombre" => $data["nombre"],
+                "precio_base" => $data["precio_base"],
             ]);
+            return response()->json(["message" => "Creado con Exito!.."]);
         } catch (\Throwable $th) {
             //throw $th;
         }
@@ -56,6 +56,8 @@ class TipoHabitacionController extends Controller
             if ($request->has("precio_base")) $tiphab->precio_base = $request->precio_base;
 
             $tiphab->save();
+
+            return response()->json(["message" => "Actualizado Correctamente"], 200);
         } catch (\Throwable $th) {
             //throw $th;
         }

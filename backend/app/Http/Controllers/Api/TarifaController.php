@@ -11,6 +11,13 @@ use Illuminate\Support\Facades\Validator;
 
 class TarifaController extends Controller
 {
+    public function index()
+    {
+        $tarifas = Tarifa::get();
+        return response()->json(["tarifas" => $tarifas]);
+    }
+
+
     public function storeNuevaTarifa(Request $request)
     {
         $validador = Validator::make($request->all(), [
@@ -50,6 +57,7 @@ class TarifaController extends Controller
                 "id_tipo_habitacion" => $request->tipo_habitacion,
                 "precio" => $request->precio,
             ]);
+            return response()->json(["messasge" => "Tarifa Creada con exito!..."], 201);
         } catch (\Throwable $th) {
             //throw $th;
         }
@@ -86,7 +94,6 @@ class TarifaController extends Controller
             return response()->json(['error' => 'Existe otra tarifa activa que se solapa en ese rango.'], 422);
         }
         try {
-
             if ($request->has("fecha_ini")) $tarifa->fecha_ini = $request->fecha_ini;
             if ($request->has("fecha_fin")) $tarifa->fecha_fin = $request->fecha_fin;
             if ($request->has("id_tipo_habitacion")) $tarifa->id_tipo_habitacion = $request->id_tipo_habitacion;
