@@ -30,7 +30,7 @@ class DatabaseSeeder extends Seeder
             TurnosSeeder::class,
             UsersSeeder::class,
             // Agregamos un usuario administrador por defecto para pruebas
-
+            DepartamentoSeeder::class,
         ]);
     }
 }

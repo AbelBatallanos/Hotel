@@ -77,7 +77,7 @@ Route::middleware(['auth:sanctum', 'role:recepcionista|admin'])->group(function 
 
 //Tareas
 Route::middleware(['auth:sanctum'])->group(function () {
-    Route::post("/tarea/store", [TareaController::class, "asignarTarea"])->name("store.tarea");
+    Route::post("/tarea", [TareaController::class, "asignarTarea"])->name("store.tarea");
     Route::put("/tarea/{id}", [TareaController::class, "updateTarea"])->name("upd.tarea");
     Route::delete("/tarea/{id}", [TareaController::class, "deleteTarea"])->name("delete.tarea");
 });
@@ -99,10 +99,10 @@ Route::middleware(['auth:sanctum', 'role:admin|recepcionista'])->group(function 
 
 //Servicios
 Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
-    Route::get("servicios", [ServicioController::class, "index"])->name("index.servicio");
-    Route::post("servico", [ServicioController::class, "store"])->name("store.servicio");
-    Route::put("servicio/{id}", [ServicioController::class, "update"])->name("upd.servicio");
-    Route::delete("servicio/{id}", [ServicioController::class, "destroy"])->name("destroy.servicio");
+    Route::get("/servicios", [ServicioController::class, "index"])->name("index.servicio");
+    Route::post("/servicio", [ServicioController::class, "store"])->name("store.servicio");
+    Route::put("/servicio/{id}", [ServicioController::class, "update"])->name("upd.servicio");
+    Route::delete("/servicio/{id}", [ServicioController::class, "destroy"])->name("destroy.servicio");
 });
 
 //Tarifas
@@ -121,19 +121,19 @@ Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
 });
 
 //Proveedores
-Route::middleware(['auth:sanctum', 'role:'])->group(function () {
-    Route::get("proveedores", [ProveedorController::class, "index"])->name("");
-    Route::get("proveedor", [ProveedorController::class, "store"])->name("");
-    Route::get("proveedor/{id}", [ProveedorController::class, "update"])->name("");
-    Route::get("proveedor/{id}", [ProveedorController::class, "destroy"])->name("");
+Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
+    Route::get("/proveedores", [ProveedorController::class, "index"])->name("");
+    Route::get("/proveedor", [ProveedorController::class, "store"])->name("");
+    Route::get("/proveedor/{id}", [ProveedorController::class, "update"])->name("");
+    Route::get("/proveedor/{id}", [ProveedorController::class, "destroy"])->name("");
 });
 
 //Departamentos
 Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
-    Route::get("departamentos", [DepartamentoController::class, "index"])->name("");
-    Route::get("departamento", [DepartamentoController::class, "store"])->name("");
-    Route::get("departamento/{id}", [DepartamentoController::class, "update"])->name("");
-    Route::get("departamento/{id}", [DepartamentoController::class, "destroy"])->name("");
+    Route::get("/departamentos", [DepartamentoController::class, "index"])->name("");
+    Route::post("/departamento", [DepartamentoController::class, "store"])->name("");
+    Route::put("/departamento/{id}", [DepartamentoController::class, "update"])->name("");
+    Route::delete("/departamento/{id}", [DepartamentoController::class, "destroy"])->name("");
 });
 
 Route::middleware(['auth:sanctum', 'role:admin'])

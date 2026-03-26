@@ -14,10 +14,11 @@ return new class extends Migration
         Schema::create('servicios', function (Blueprint $table) {
             $table->id();
             $table->string("nombre");
-            $table->integer("costo_unit");
+            $table->decimal("costo_unit", 8, 2);
             $table->foreignId("id_departamento")->constrained("departamentos")->onDelete("cascade");
             $table->timestamps();
 
+            $table->softDeletes();
             $table->index("id_departamento");
         });
     }

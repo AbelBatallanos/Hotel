@@ -20,4 +20,9 @@ class Tarea extends Model
         "id_empleado",
         "id_estado"
     ];
+
+    protected $casts = [
+        'fecha_creada' => 'datetime',
+        'fecha_limite' => 'datetime',
+    ];
 }

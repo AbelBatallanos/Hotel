@@ -34,17 +34,18 @@ class TareaController extends Controller
     {
         Log::info('Entrando al método asignarTarea', ['request' => $request->all()]);
         $request->validate([
-            "descripcion" => "required|string",
-            "fecha_limite" => "required",
-            "id_empleado" => "required|exists:empleado,id",
+            "descripcion" => "required|string|regex:/^[a-zA-Z0-9\s]+$/",
+            "fecha_limite" => "required|date_format:Y-m-d H:i:s",
+            "id_empleado" => "required|numeric|exists:empleados,id",
 
         ]);
 
         try {
             $tarea = Tarea::create([
                 "descripcion" => $request->descripcion,
+                "fecha_creada" => now(),
                 "fecha_limite" => $request->fecha_limite,
-                "id_empleado" => $request->empleado,
+                "id_empleado" => $request->id_empleado,
                 "id_estado" => 5,
             ]);
             Log::info('Tarea creada correctamente', ['tarea' => $tarea]);
