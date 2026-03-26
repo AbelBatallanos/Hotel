@@ -9,7 +9,7 @@ class TiposHabitacion extends Model
 {
     use SoftDeletes;
     protected $table = 'tipos_habitacion';
-    protected $fillable = ["nombre", "precio_base"];
+    protected $fillable = ["nombre", "precio_base", "amenities", "tipo_cama", "capacidad"];
 
 
     public function habitaciones()

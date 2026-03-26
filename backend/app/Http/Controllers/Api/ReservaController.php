@@ -159,6 +159,7 @@ class ReservaController extends Controller
                         );
                         $hb->update(["estado_id" => 2]);
                     }
+
                     $reserva->total = $nuevoTotal;
                 }
                 if ($request->has("fecha_ini")) $reserva->fecha_ini = $request->fecha_ini;
@@ -166,7 +167,7 @@ class ReservaController extends Controller
                 //guardamos los nuevos datos de reserva
                 $reserva->save();
 
-                return response()->json(['message' => 'Datos actualizados con éxito']);
+                return response()->json(['message' => 'Datos actualizados con éxito'], 200);
             });
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);

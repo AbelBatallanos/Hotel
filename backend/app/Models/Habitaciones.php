@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Habitaciones extends Model
 {
     use SoftDeletes;
-    protected $fillable = ["tipo_habitacion_id", "codigo", "estado_id", "capacidad", "imagen", "descripcion"];
+    protected $fillable = ["id_tipo_habitacion", "num_habitacion", "id_estado", "imagen", "descripcion"];
 
     public function estado()
     {
@@ -16,6 +16,6 @@ class Habitaciones extends Model
     }
     public function tipohabitacion()
     {
-        return $this->belongsTo(TiposHabitacion::class, "tipo_habitacion_id");
+        return $this->belongsTo(TiposHabitacion::class, "id_tipo_habitacion");
     }
 }

@@ -9,7 +9,7 @@ class Reserva extends Model
 {
     use SoftDeletes;
 
-    protected $fillable = ["total", "fecha_ini", "fecha_fin", "user_id", "estado_id"];
+    protected $fillable = ["origen_reserva", "total", "fecha_ini", "fecha_fin", "id_recepcion", "id_cliente", "estado_id"];
 
     public function user()
     {
@@ -24,5 +24,10 @@ class Reserva extends Model
     public function detalles()
     {
         return $this->hasMany(ReservaDetalle::class, "reserva_id");
+    }
+
+    public function consumos()
+    {
+        return $this->morphMany(Consumo::class, "consumible");
     }
 }

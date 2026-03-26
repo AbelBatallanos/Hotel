@@ -23,9 +23,14 @@ class User extends Authenticatable
 
     protected $fillable = [
         'name',
+        'lastname',
         'email',
+        'ci',
         'password',
         "rol_id",
+        'es_admin',
+        'es_empleado',
+        'es_cliente',
     ];
 
 
@@ -50,6 +55,15 @@ class User extends Authenticatable
         return $this->hasMany(Reserva::class);
     }
 
+    public function empleado()
+    {
+        return $this->hasOne(Empleado::class);
+    }
+
+    public function cliente()
+    {
+        return $this->hasOne(Cliente::class);
+    }
     /**
      * Get the attributes that should be cast.
      *

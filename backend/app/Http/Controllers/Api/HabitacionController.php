@@ -19,7 +19,8 @@ class HabitacionController extends Controller
      */
     public function index()
     {
-        //
+        $habitaciones = Habitaciones::get();
+        return response()->json(["habitaciones" => $habitaciones]);
     }
 
     public function getAllHabitaciones()
@@ -34,11 +35,18 @@ class HabitacionController extends Controller
 
     public function storehabitacion(Request $request)
     {
+        // $request->validate([ antiguo
+        //     "codigo" => "required|unique:habitaciones,codigo",
+        //     "capacidad" => "required|integer",
+        //     "descripcion" => "required|string",
+        //     "tipo_habitacion_id" => "required|exists:tipos_habitacion,id",
+        //     "imagen" => "nullable|image|mimes:jpg,jpeg,png|max:2048"
+        // ]);
         $request->validate([
-            "codigo" => "required|unique:habitaciones,codigo",
+            "num_habitacion" => "required|unique:habitaciones,codigo",
             "capacidad" => "required|integer",
             "descripcion" => "required|string",
-            "tipo_habitacion_id" => "required|exists:tipos_habitacion,id",
+            "id_tipo_habitacion" => "required|exists:tipos_habitacion,id",
             "imagen" => "nullable|image|mimes:jpg,jpeg,png|max:2048"
         ]);
 
@@ -53,7 +61,7 @@ class HabitacionController extends Controller
             // Ejemplo: /storage/habitaciones/nombre_generado.jpg
             $datosHabitacion['imagen'] = Storage::url($path);
         }
-        $datosHabitacion['estado_id'] = 1;
+        $datosHabitacion['id_estado'] = 1;
         $habitacion = Habitaciones::create($datosHabitacion);
         return response()->json([
             'message' => 'Habitación creada con éxito',
@@ -70,6 +78,12 @@ class HabitacionController extends Controller
 
     public function updateHabitacion(Request $request, Habitaciones $habitacion)
     {
+        // $request->validate([ antiguo
+        //     "codigo" => "sometimes|string",
+        //     "capacidad" => "sometimes|integer",
+        //     "tipo_habitacion_id" => "sometimes|exist:tipos_habitacion,id",
+        //     "estado_id" => "sometimes|exist:estado,id"
+        // ]);
         $request->validate([
             "codigo" => "sometimes|string",
             "capacidad" => "sometimes|integer",
@@ -86,10 +100,10 @@ class HabitacionController extends Controller
                 ]);
             }
 
-            if ($request->codigo) $habDB->update(["codigo" => $request->codigo]);
+            if ($request->codigo) $habDB->update(["num_habitacion" => $request->codigo]);
             if ($request->capacidad) $habDB->update(["capacidad" => $request->capacidad]);
-            if ($request->tipo_habitacion_id) $habDB->update(["tipo_habitacion_id" => $request->tipo_habitacion_id]);
-            if ($request->estado_id) $habDB->update(["estado_id" => $request->estado_id]);
+            if ($request->tipo_habitacion_id) $habDB->update(["id_tipo_habitacion" => $request->tipo_habitacion_id]);
+            if ($request->estado_id) $habDB->update(["id_estado" => $request->estado_id]);
         } catch (\Throwable $th) {
             //throw $th;
         }

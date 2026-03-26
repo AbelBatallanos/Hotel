@@ -13,7 +13,22 @@ return new class extends Migration
     {
         Schema::create('favoritos', function (Blueprint $table) {
             $table->id();
+            $table->foreignId("id_habitacion")
+                ->constrained("habitaciones")
+                ->onDelete("cascade")
+                ->onUpdate("cascade");
+
+            $table->foreignId("id_user")
+                ->constrained("users")
+                ->onDelete("cascade")
+                ->onUpdate("cascade");
+
+
             $table->timestamps();
+            $table->softDeletes();
+
+            $table->index("id_habitacion");
+            $table->index("id_user");
         });
     }
 
