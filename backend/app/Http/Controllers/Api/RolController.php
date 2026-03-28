@@ -9,17 +9,27 @@ use Illuminate\Support\Facades\Log;
 
 class RolController extends Controller
 {
+
+    public function index()
+    {
+
+        $roles = Roles::get();
+        return response()->json(["roles" => $roles]);
+    }
+
     public function store(Request $request)
     {
         $request->validate([
-            "nombre" => "required|string"
+            "nombre" => "required|string|unique:roles,nombre"
         ]);
         try {
-            Roles::created([
+            Roles::create([
                 "nombre" => $request->nombre,
             ]);
+            return response()->json(["message" => "Se Registro con Exito!...."]);
         } catch (\Throwable $th) {
-            //throw $th;
+            Log::error("Error store Role" . $th->getMessage());
+            return response()->json("error", 500);
         }
         return;
     }
@@ -33,14 +43,12 @@ class RolController extends Controller
 
         try {
             $rol = Roles::findOrfail($id);
-            if ($rol && $request->has("nombre")) {
-                $rol->update(["nombre" => $request->nombre]);
-                return;
-            }
+            $rol->update(["nombre" => $request->nombre]);
             Log::info("Rol update correctamente");
-            return response()->json(["messageError" => "No se encontro el Rol"]);
+            return response()->json(["message" => "Rol Actualizado Correctamente!..."]);
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
             Log::warning('Intento de update rol inexistente', ['id' => $id]);
+            return response()->json(["messageError" => "No se encontro el Rol"]);
         } catch (\Throwable $th) {
             Log::error("Error en update rol", [
                 "mensaje" => $th->getMessage(),
@@ -57,9 +65,11 @@ class RolController extends Controller
         try {
             $rol = Roles::findOrFail($id);
             $rol->delete();
+            return response()->json(["message" => "Rol Eliminado Correctamente!..."]);
             Log::info("Rol Eliminado correctamente");
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
             Log::warning('Intento de eliminar rol inexistente', ['id' => $id]);
+            return response()->json(["messageError" => "No se encontro el Rol"]);
         } catch (\Throwable $th) {
             Log::error("Error en eliminar rol", [
                 "mensaje" => $th->getMessage(),

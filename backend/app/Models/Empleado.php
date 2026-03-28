@@ -19,4 +19,9 @@ class Empleado extends Model
         "historial_notas",
         "id_turno"
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, "id_user");
+    }
 }

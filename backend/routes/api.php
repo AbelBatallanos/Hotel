@@ -28,13 +28,10 @@ Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 Route::middleware(["auth:sanctum"])->post('/logout', [AuthController::class, "logout"]);
 
-
-Route::get("/estados", [EstadoController::class, "getAllEstados"])->middleware(["auth:sanctum"])->name("getAll.Estados");
-
 Route::get("/tiposhabitacion", [TipoHabitacionController::class, "getAll"])->middleware(["auth:sanctum"])->name("getAll.tiposhabitacion");
 
 //Roles
-Route::middleware(['auth:sanctum', 'role:'])->group(function () {
+Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
     Route::get("/roles", [RolController::class, "index"]);
     Route::post("/roles", [RolController::class, "store"])->name("store.rol");
     Route::put("/rol/{id}", [RolController::class, "update"])->name("upd.rol");
@@ -84,9 +81,9 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
 //Favoritos
 Route::middleware(['auth:sanctum', 'role:cliente'])->group(function () {
-    Route::get("/misfavorito", [FavoritoController::class, "misFavoritos"])->name("");
-    Route::get("/favorito", [FavoritoController::class, "store"])->name("");
-    Route::get("/favorito/{id}", [FavoritoController::class, "destroy"])->name("");
+    Route::get("/misfavoritos", [FavoritoController::class, "misFavoritos"])->name("");
+    Route::post("/favorito", [FavoritoController::class, "store"])->name("");
+    Route::delete("/favorito/{id}", [FavoritoController::class, "destroy"])->name("");
 });
 
 //Reparaciones
@@ -106,10 +103,10 @@ Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
 });
 
 //Tarifas
-Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
+Route::middleware(['auth:sanctum'])->group(function () {
     Route::get("/tarifas", [TarifaController::class, "index"])->name("");
-    Route::post("/tarifa", [TarifaController::class, "storeNuevaTarifa"])->name("");
-    Route::put("/tarifa/{id}", [TarifaController::class, "update"])->name("");
+    Route::post("/tarifa", [TarifaController::class, "storeNuevaTarifa"])->name("store.tarifa");
+    Route::put("/tarifa/{id}", [TarifaController::class, "update"])->name("upd.tarifa");
 });
 
 //TipoHabitacion
@@ -136,9 +133,18 @@ Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
     Route::delete("/departamento/{id}", [DepartamentoController::class, "destroy"])->name("");
 });
 
+//Estados
+Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
+    Route::get("/estados", [EstadoController::class, "getAllEstados"]);
+    Route::get("/estado", [EstadoController::class, "store"]);
+    Route::get("/estado/{id}", [EstadoController::class, "update"]);
+    Route::get("/estado/{id}", [EstadoController::class, "destroy"]);
+});
+
 Route::middleware(['auth:sanctum', 'role:admin'])
     ->get("/personal", [UserController::class, "getAllPersonal"])->name("personal");
 Route::middleware(['auth:sanctum', 'role:admin'])
     ->post("/personal", [UserController::class, "storePersonal"])->name("post.personal");
+
 Route::get("/", [Habitaciones::class])->name("home.cliente");
 Route::get("/recepcion", [Habitaciones::class])->name("dashboard.empresa");

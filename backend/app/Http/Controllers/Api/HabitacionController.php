@@ -25,7 +25,7 @@ class HabitacionController extends Controller
 
     public function getAllHabitaciones()
     {
-        $habitaciones_disponibles = Habitaciones::where("estado_id", 1)->orderBy("id", "DESC")->get();
+        $habitaciones_disponibles = Habitaciones::with(["estado", "tipohabitacion"])->where("id_estado", 1)->orderBy("id", "DESC")->get();
 
         return response()->json([
             "estado" => 200,
@@ -43,9 +43,9 @@ class HabitacionController extends Controller
         //     "imagen" => "nullable|image|mimes:jpg,jpeg,png|max:2048"
         // ]);
         $request->validate([
-            "num_habitacion" => "required|unique:habitaciones,codigo",
-            "capacidad" => "required|integer",
-            "descripcion" => "required|string",
+            "num_habitacion" => "required|unique:habitaciones,num_habitacion",
+            // "capacidad" => "required|integer",
+            // "descripcion" => "required|string",
             "id_tipo_habitacion" => "required|exists:tipos_habitacion,id",
             "imagen" => "nullable|image|mimes:jpg,jpeg,png|max:2048"
         ]);

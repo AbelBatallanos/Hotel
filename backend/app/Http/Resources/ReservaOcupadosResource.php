@@ -16,7 +16,9 @@ class ReservaOcupadosResource extends JsonResource
     {
         return [
             "id" => $this->id,
-            "usuario" => new UserResumenResource($this->user),
+            "origen_reserva" => $this->origen_reserva,
+            "cliente" => $this->cliente->user->name,
+            "recepcionista" => $this->empleado->user->name ?? null,
             "fecha_ini" => $this->fecha_ini,
             "fecha_fin" => $this->fecha_fin,
             "total" => $this->total,

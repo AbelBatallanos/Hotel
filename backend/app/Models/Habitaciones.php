@@ -12,7 +12,7 @@ class Habitaciones extends Model
 
     public function estado()
     {
-        return $this->belongsTo(Estados::class, "estado_id");
+        return $this->belongsTo(Estados::class, "id_estado");
     }
     public function tipohabitacion()
     {

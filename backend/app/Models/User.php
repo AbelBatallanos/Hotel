@@ -57,12 +57,12 @@ class User extends Authenticatable
 
     public function empleado()
     {
-        return $this->hasOne(Empleado::class);
+        return $this->hasOne(Empleado::class, "id_user");
     }
 
     public function cliente()
     {
-        return $this->hasOne(Cliente::class);
+        return $this->hasOne(Cliente::class, "id_user");
     }
     /**
      * Get the attributes that should be cast.
