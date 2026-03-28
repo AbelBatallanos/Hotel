@@ -8,8 +8,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Tarifa extends Model
 {
-    use SoftDeletes;
-    protected $filltable = ["fecha_ini", "fecha_fin", "id_tipo_habitacion", "precio", "activo"];
+    // use SoftDeletes;
+    protected $fillable = ["fecha_ini", "fecha_fin", "id_tipo_habitacion", "precio", "activo"];
 
     protected $casts = [
         'fecha_ini' => 'date',
@@ -20,6 +20,16 @@ class Tarifa extends Model
     public function tipohabitacion()
     {
         return $this->belongsTo(TiposHabitacion::class, "id_tipo_habitacion");
+    }
+
+    public function scopeTarifaDescuento($query, $fecha = null, int $idTipoHabitacion)
+    {
+        $fecha = $fecha ? Carbon::parse($fecha) : Carbon::now();
+
+        return $query->where("activo", true)
+            ->where("id_tipo_habitacion", $idTipoHabitacion)
+            ->where("fecha_ini", "<=", $fecha)
+            ->where("fecha_fin", ">=", $fecha)->orderBy("id", "DESC")->first();
     }
 
     // Scope para tarifas vigentes (activas y con fecha que incluye hoy)

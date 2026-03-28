@@ -17,9 +17,11 @@ class HabitacionResource extends JsonResource
     {
         return [
             "id" => $this->id,
-            "codigo" => $this->codigo,
-            "descripcion" => $this->descripcion,
-            "capacidad" => $this->capacidad,
+            "nombre" => $this->tipohabitacion->nombre,
+            "amenities" => $this->tipohabitacion->amenities,
+            "tipo_cama" => $this->tipohabitacion->tipo_cama,
+            "numero_habitacion" => $this->num_habitacion,
+            "capacidad" => $this->tipohabitacion->capacidad,
             "estado" => $this->estado->nombre ?? null,
             "imagen" => $this->imagen,
             "tipo_habitacion" => $this->tipohabitacion->nombre ?? null,

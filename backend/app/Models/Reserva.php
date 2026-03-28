@@ -11,11 +11,14 @@ class Reserva extends Model
 
     protected $fillable = ["origen_reserva", "total", "fecha_ini", "fecha_fin", "id_recepcion", "id_cliente", "estado_id"];
 
-    public function user()
+    public function cliente()
     {
-        return $this->belongsTo(User::class, "user_id");
+        return $this->belongsTo(Cliente::class, "id_cliente");
     }
-
+    public function empleado()
+    {
+        return $this->belongsTo(Empleado::class, "id_recepcion");
+    }
     public function estado()
     {
         return $this->belongsTo(Estados::class, "estado_id");

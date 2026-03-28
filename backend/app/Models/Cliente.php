@@ -22,4 +22,9 @@ class Cliente extends Model
     {
         return $this->belongsTo(User::class, "id_user");
     }
+
+    public function favoritos()
+    {
+        return $this->hasMany(Favorito::class, "id_cliente");
+    }
 }

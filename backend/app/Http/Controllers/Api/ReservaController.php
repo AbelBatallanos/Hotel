@@ -10,6 +10,7 @@ use App\Http\Resources\ReservaResource;
 use App\Models\Habitaciones;
 use App\Models\Reserva;
 use App\Models\ReservaDetalle;
+use App\Models\Tarifa;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -19,10 +20,10 @@ use function Symfony\Component\Clock\now;
 class ReservaController extends Controller
 {
     public function getMisReservaciones(Request $request)
-    {
+    { //cliente
         try {
-            $userid = $request->user()->id;
-            $misreservas = Reserva::where("user_id", $userid)
+            $userid = $request->user()->cliente->id;
+            $misreservas = Reserva::where("id_cliente", $userid)
                 ->with(["detalles.habitacion.tipohabitacion"])
                 ->get();
 
@@ -30,16 +31,16 @@ class ReservaController extends Controller
 
             return response()->json(["reservas" => ReservaResource::collection($misreservas)]);
         } catch (\Throwable $th) {
-            //throw $th;
+            Log::error("Error en getMisReservas" . $th->getMessage());
+            return response()->json("Error en el servidor", 500);
         }
-        // return response()->json(["user" => $request->user()]);
     }
 
-    public function geAllReservaciones()
+    public function geAllReservaciones() //recepcion
     {
         // $reservaciones_disponibles = Reserva::where("estado_id", 1)->get();
-        $reservaciones_pendientes = Reserva::where("estado_id", 5)->with(["user"])->get();
-        $reservaciones_ocupados = Reserva::where("estado_id", 2)->with(["user", "detalles.habitacion.tipohabitacion", "detalles.estado"])->get();
+        $reservaciones_pendientes = Reserva::where("estado_id", 5)->with(["cliente", "empleado", "detalles.habitacion.tipohabitacion", "detalles.estado"])->get();
+        $reservaciones_ocupados = Reserva::where("estado_id", 2)->with(["user.cliente", "user.empleado", "detalles.habitacion.tipohabitacion", "detalles.estado"])->get();
         return response()->json([
             "Pendientes" => ReservaPendientesResource::collection($reservaciones_pendientes),
             "Ocupados" => ReservaOcupadosResource::collection($reservaciones_ocupados),
@@ -51,14 +52,18 @@ class ReservaController extends Controller
     {
         Log::info('Datos recibidos en storeReservacion:', $request->all());
         $fields = $request->validate([
+            "origen_reserva" => "sometimes|string",
             "fecha_ini" => "sometimes|date",
             "fecha_fin" => "sometimes|date",
+
             "habitaciones" => "required|array|min:1",
-            "habitaciones.*.id" => "exists:habitaciones,id"
+            "habitaciones.*.id" => "exists:habitaciones,id",
+            // "id_tarifa" => "nullable|numeric|exists:tarifas,id",
         ]);
+
         try {
             $habitacionesIds = collect($fields["habitaciones"])->pluck("id");
-            $hab_ocupados = Habitaciones::whereIn("id", $habitacionesIds)->where("estado_id", 2)->get(["id", "codigo"]);
+            $hab_ocupados = Habitaciones::whereIn("id", $habitacionesIds)->where("id_estado", 2)->get(["id", "num_habitacion"]);
 
             if ($hab_ocupados->count()) {
                 return response()->json([
@@ -73,12 +78,19 @@ class ReservaController extends Controller
             return DB::transaction(function () use ($request, $fields) {
                 $ids = collect($request->habitaciones)->pluck("id");
                 $user = $request->user();
+                if ($user->rol_id == 2) {
+                    $request->validate([
+                        "id_cliente" => "required|numeric|exists:clientes,id"
+                    ]);
+                }
                 $total = 0;
                 $habitacionesDB = Habitaciones::whereIn("id", $ids)->get();
                 $reserva = Reserva::create([
                     "fecha_ini" => $request->fecha_ini ?? today()->format('Y-m-d'),
                     "fecha_fin" =>  $request->fecha_fin ?? today()->format('Y-m-d'),
-                    "user_id" => $user->id,
+                    "id_cliente" => $user->rol_id == 3 ? $user->cliente->id : $request->id_cliente,
+                    "id_recepcion" => $user->rol_id == 2 ? $user->empleado->id : null,
+                    "origen_reserva" => $request->origen_reserva,
                     "total" => $total,
                     "estado_id" => 5,
                     "created_at"    => now(),
@@ -86,7 +98,9 @@ class ReservaController extends Controller
                 ]);
                 $detallesListParaInsertar = [];
                 foreach ($habitacionesDB as $hb) {
-                    $subtotal = $hb->tipohabitacion->precio_base;
+
+                    $subtotal = $hb->tipohabitacion->calcularSubtotal($reserva->fecha_ini);
+
                     $total += $subtotal;
 
                     $detallesListParaInsertar[] = [
@@ -98,7 +112,7 @@ class ReservaController extends Controller
                         "updated_at"    => now()
                     ];
 
-                    $hb->update(["estado_id" => 2]);
+                    $hb->update(["id_estado" => 2]);
                 }
                 //Usamos DetalleReserva::insert($array) para hacer una sola consulta a la base de datos en lugar de hacer un create dentro del bucle (lo cual es lento).
                 ReservaDetalle::insert($detallesListParaInsertar);
@@ -130,7 +144,8 @@ class ReservaController extends Controller
             "fecha_ini" => "sometimes|date",
             "fecha_fin" => "sometimes|date",
             "habitaciones" => "sometimes|array|min:1",
-            "habitaciones.*" => "exists:habitaciones,id"
+            "habitaciones.*.id" => "exists:habitaciones,id",
+            // "id_tarifa" => "nullable|numeric|exists:tarifas,id",
         ]);
         try {
             return DB::transaction(function () use ($request, $reserva) {
@@ -145,7 +160,8 @@ class ReservaController extends Controller
                     $reserva->detalles()->delete();
 
                     $nuevoTotal = 0;
-                    $habitaciones = Habitaciones::whereIn('id', $request->habitaciones)->get();
+                    $habitIds = collect($request->habitaciones)->pluck("id");
+                    $habitaciones = Habitaciones::whereIn('id', $habitIds)->get();
                     //Creamdo nuevoas detalles
                     foreach ($habitaciones as $hb) {
                         $subtotal = $hb->tipohabitacion->precio_base;

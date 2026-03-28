@@ -10,11 +10,11 @@ class Favorito extends Model
     use SoftDeletes;
 
 
-    protected $fillable = ["id_user", "id_habitacion"];
+    protected $fillable = ["id_cliente", "id_habitacion"];
 
-    public function user()
+    public function cliente()
     {
-        return $this->belongsTo(User::class, "id_user");
+        return $this->belongsTo(Cliente::class, "id_cliente");
     }
 
     public function habitacion()

@@ -45,20 +45,29 @@ class TarifaController extends Controller
                 })->exists();
 
             if ($existe) {
-                $validator->errors()->add('fecha', 'Ya existe una tarifa activa que se solapa en ese rango para ese tipo de habitación.');
+                $validator->errors()->add('fecha_fin', 'Ya existe una tarifa activa que se solapa en ese rango para ese tipo de habitación.');
             }
         });
-
+        if ($validador->fails()) {
+            return response()->json([
+                'message' => 'Errores de validación',
+                'errors' => $validador->errors()
+            ], 422);
+        }
         try {
+            $data = $validador->validated();
+
             Tarifa::create([
-                "fecha_ini" => $request->fecha_ini,
-                "fecha_fin" => $request->fecha_fin,
-                "id_tipo_habitacion" => $request->tipo_habitacion,
-                "precio" => $request->precio,
+                "fecha_ini" => $data['fecha_ini'],
+                "fecha_fin" => $data['fecha_fin'],
+                "id_tipo_habitacion" => $data['tipo_habitacion'],
+                "precio" => $data['precio'],
+
             ]);
             return response()->json(["messasge" => "Tarifa Creada con exito!..."], 201);
         } catch (\Throwable $th) {
-            //throw $th;
+            Log::error("Error en storeTarifa" . $th->getMessage());
+            return response()->json(["error" => "Hubo un error"], 500);
         }
     }
 
