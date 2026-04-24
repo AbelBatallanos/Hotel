@@ -26,6 +26,8 @@ Route::get('/user', function (Request $request) {
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
+Route::get('/allUsuarios', [UserController::class, 'getAllUsers']);
+
 Route::middleware(["auth:sanctum"])->post('/logout', [AuthController::class, "logout"]);
 
 Route::get("/tiposhabitacion", [TipoHabitacionController::class, "getAll"])->middleware(["auth:sanctum"])->name("getAll.tiposhabitacion");
@@ -48,22 +50,24 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
     Route::put("/reservacion/{reserva}", [ReservaController::class, "updateReservacionById"])->name("edit.reserva");
 
-    Route::delete("/reservacion/{reserva}", [ReservaController::class, "delete"])->name("delete.reserva");
+    Route::delete("/reservacion/{reserva}", [ReservaController::class, "destroy"])->name("delete.reserva");
 });
 
 //ReservaDetalles
-Route::middleware(['auth:sanctum', 'role:'])->group(function () {
+Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
     Route::delete('/detalle/{id}', [ReservaDetalleController::class, "destroy"]);
 });
 
 //Habitaciones
-Route::middleware(['auth:sanctum', "role:admin"])->group(function () {
+Route::middleware(['auth:sanctum'])->group(function () {
     Route::get("/habitaciones", [HabitacionController::class, "getAllHabitaciones"])->name("getAll.Habitaciones");
     Route::get("/habitacion/{habitacion}", [HabitacionController::class, "showHabitacion"])->middleware("role:cliente|recepcionista")->name("show.habitacion");
 
-    Route::post("/habitacion", [HabitacionController::class, "storehabitacion"]);
-    Route::put("/habitacion/{habitacion}", [HabitacionController::class, "updateHabitacion"])->middleware("role:admin")->name("edit.habitacion");
-    Route::delete("/habitacion/{habitacion}", [HabitacionController::class, "destroy"])->name("delete.habitacion");
+    Route::middleware(['auth', 'role:admin'])->group(function () {
+        Route::post("/habitacion", [HabitacionController::class, "storehabitacion"]);
+        Route::put("/habitacion/{habitacion}", [HabitacionController::class, "updateHabitacion"])->middleware("role:admin")->name("edit.habitacion");
+        Route::delete("/habitacion/{habitacion}", [HabitacionController::class, "destroy"])->name("delete.habitacion");
+    });
 });
 
 //Facturas
@@ -74,6 +78,7 @@ Route::middleware(['auth:sanctum', 'role:recepcionista|admin'])->group(function 
 
 //Tareas
 Route::middleware(['auth:sanctum'])->group(function () {
+    //Crear ruta para ver las tareas de alguien en espefico pasando su nombre o ci algo unico
     Route::post("/tarea", [TareaController::class, "asignarTarea"])->name("store.tarea");
     Route::put("/tarea/{id}", [TareaController::class, "updateTarea"])->name("upd.tarea");
     Route::delete("/tarea/{id}", [TareaController::class, "deleteTarea"])->name("delete.tarea");
@@ -94,6 +99,7 @@ Route::middleware(['auth:sanctum', 'role:admin|recepcionista'])->group(function 
     Route::put("/elegirreparacion", [ReparacionController::class, "reclamarReparacion"]);
 });
 
+
 //Servicios
 Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
     Route::get("/servicios", [ServicioController::class, "index"])->name("index.servicio");
@@ -102,6 +108,7 @@ Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
     Route::delete("/servicio/{id}", [ServicioController::class, "destroy"])->name("destroy.servicio");
 });
 
+
 //Tarifas
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::get("/tarifas", [TarifaController::class, "index"])->name("");
@@ -109,13 +116,15 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::put("/tarifa/{id}", [TarifaController::class, "update"])->name("upd.tarifa");
 });
 
+
 //TipoHabitacion
 Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
     Route::get("/tiposhabitacion", [TipoHabitacionController::class, "getAll"])->name("");
-    Route::get("/tipohab", [TipoHabitacionController::class, "store"])->name("");
-    Route::get("/tipohab/{id}", [TipoHabitacionController::class, "update"])->name("");
-    Route::get("/tipohab/{id}", [TipoHabitacionController::class, "destroy"])->name("");
+    Route::post("/tipohab", [TipoHabitacionController::class, "store"])->name("");
+    Route::put("/tipohab/{id}", [TipoHabitacionController::class, "update"])->name("");
+    Route::delete("/tipohab/{id}", [TipoHabitacionController::class, "destroy"])->name("");
 });
+
 
 //Proveedores
 Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {

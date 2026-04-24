@@ -17,15 +17,19 @@ class HabitacionResource extends JsonResource
     {
         return [
             "id" => $this->id,
-            "nombre" => $this->tipohabitacion->nombre,
-            "amenities" => $this->tipohabitacion->amenities,
-            "tipo_cama" => $this->tipohabitacion->tipo_cama,
-            "numero_habitacion" => $this->num_habitacion,
-            "capacidad" => $this->tipohabitacion->capacidad,
+            "tipohabitacion" => [
+                "nombre" => $this->tipohabitacion->nombre ?? null,
+                "amenities" => $this->tipohabitacion->amenities ?? null,
+                "tipo_cama" => $this->tipohabitacion->tipo_cama ?? null,
+                "numero_habitacion" => $this->num_habitacion ?? null,
+                "capacidad" => $this->tipohabitacion->capacidad ?? null,
+                "precio" => $this->tipohabitacion->precio_base ?? null
+
+            ],
+
             "estado" => $this->estado->nombre ?? null,
-            "imagen" => $this->imagen,
-            "tipo_habitacion" => $this->tipohabitacion->nombre ?? null,
-            "precio" => $this->tipohabitacion->precio_base ?? null
+            "imagen" => $this->imagen ?? null,
+
         ];
     }
 }

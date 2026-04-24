@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Tarea\StoreTareaRequest;
 use App\Models\Tarea;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -30,22 +31,17 @@ class TareaController extends Controller
     }
 
 
-    public function asignarTarea(Request $request)
+    public function asignarTarea(StoreTareaRequest $request)
     {
         Log::info('Entrando al método asignarTarea', ['request' => $request->all()]);
-        $request->validate([
-            "descripcion" => "required|string|regex:/^[a-zA-Z0-9\s]+$/",
-            "fecha_limite" => "required|date_format:Y-m-d H:i:s",
-            "id_empleado" => "required|numeric|exists:empleados,id",
-
-        ]);
+        $data = $request->validated();
 
         try {
             $tarea = Tarea::create([
-                "descripcion" => $request->descripcion,
+                "descripcion" => $data["descripcion"],
                 "fecha_creada" => now(),
-                "fecha_limite" => $request->fecha_limite,
-                "id_empleado" => $request->id_empleado,
+                "fecha_limite" => $data["fecha_limite"],
+                "id_empleado" => $data["id_empleado"],
                 "id_estado" => 5,
             ]);
             Log::info('Tarea creada correctamente', ['tarea' => $tarea]);

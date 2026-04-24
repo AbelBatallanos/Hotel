@@ -39,10 +39,11 @@ class StoreTareaRequest extends FormRequest
     public function messages()
     {
         return [
-            "descripcion.required" => "El descripcion es obligatorio",
+            "descripcion.required" => "La descripcion es obligatorio",
             "descripcion.string" => "El campo descripcion solo debe de ser texto",
             'descripcion.regex' => 'El descripcion solo puede contener letras, números y espacios.',
             "fecha_limite.required" => "La fecha_limite es obligatorio",
+            "fecha_limite.date_format" => "No tiene el formato correcto: Debe de ser Y-m-d H:m:s",
             "id_empleado.required" => "El id_empleado es obligatorio",
         ];
     }

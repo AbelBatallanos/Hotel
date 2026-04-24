@@ -4,10 +4,12 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\TiposHabitacion\StoreTiposHabitacionRequest;
+use App\Http\Requests\TiposHabitacion\UpdateTipoHabitacionRequest;
 use App\Http\Resources\TipoHabitacionResource;
 use App\Models\TiposHabitacion;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
-use Symfony\Component\CssSelector\Node\FunctionNode;
+use Illuminate\Support\Facades\Log;
 
 class TipoHabitacionController extends Controller
 {
@@ -19,7 +21,6 @@ class TipoHabitacionController extends Controller
     public function store(StoreTiposHabitacionRequest $request)
     {
         $data = $request->validated();
-
 
         try {
             TiposHabitacion::create([
@@ -35,31 +36,20 @@ class TipoHabitacionController extends Controller
         }
     }
 
-    public function update($id, Request $request)
+    public function update($id, UpdateTipoHabitacionRequest $request)
     {
-        $request->validate([
-            "tipo_cama" => "sometimes|string",
-            "amenities" => "sometimes|string",
-            "capacidad" => "sometimes|numeric",
-            "nombre" => "sometimes|string",
-            "precio_base" => "sometimes|numeric",
-
-        ]);
-
+        $data = $request->validated();
         try {
             $tiphab = TiposHabitacion::findOrFail($id);
+            $data = array_filter($data, fn($v) => !is_null($v) && $v !== '');
 
-            if ($request->has("tipo_cama")) $tiphab->tipo_cama = $request->tipo_cama;
-            if ($request->has("amenities")) $tiphab->amenities = $request->amenities;
-            if ($request->has("capacidad")) $tiphab->capacidad = $request->capacidad;
-            if ($request->has("nombre")) $tiphab->nombre = $request->nombre;
-            if ($request->has("precio_base")) $tiphab->precio_base = $request->precio_base;
-
-            $tiphab->save();
+            $tiphab->update($data);
 
             return response()->json(["message" => "Actualizado Correctamente"], 200);
+        } catch (ModelNotFoundException $e) {
+            return response()->json(['message' => 'No existe ese registro'], 404);
         } catch (\Throwable $th) {
-            //throw $th;
+            return response()->json(['message' => 'Error interno'], 500);
         }
     }
 
@@ -69,8 +59,10 @@ class TipoHabitacionController extends Controller
             $tiphab = TiposHabitacion::findOrFail($id);
 
             $tiphab->delete();
+        } catch (ModelNotFoundException $e) {
+            return response()->json(['message' => 'No existe ese registro'], 404);
         } catch (\Throwable $th) {
-            //throw $th;
+            return response()->json(['message' => 'Error interno'], 500);
         }
     }
 }

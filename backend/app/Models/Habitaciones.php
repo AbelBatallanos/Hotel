@@ -8,7 +8,13 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Habitaciones extends Model
 {
     use SoftDeletes;
-    protected $fillable = ["id_tipo_habitacion", "num_habitacion", "id_estado", "imagen", "descripcion"];
+    protected $fillable = [
+        "id_tipo_habitacion",
+        "num_habitacion",
+        "id_estado",
+        "imagen",
+        "descripcion"
+    ];
 
     public function estado()
     {

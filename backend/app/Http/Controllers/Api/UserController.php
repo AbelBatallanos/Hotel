@@ -44,4 +44,9 @@ class UserController extends Controller
             "estado" => 201
         ], 201);
     }
+
+    public function getAllUsers()
+    {
+        return response()->json(["data" => User::all()]);
+    }
 }

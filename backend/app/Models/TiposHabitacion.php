@@ -22,9 +22,15 @@ class TiposHabitacion extends Model
         return $this->hasOne(Tarifa::class, "id_tipo_habitacion");
     }
 
-    public function calcularSubtotal($fecha)
+    // public function calcularSubtotal($fecha)
+    // {
+    //     $tarifa = $this->tarifa()->TarifaDescuento($fecha, $this->id);
+    //     return max(0, $this->precio_base - ($tarifa->precio ?? 0));
+    // }
+
+    public function montoDescuento($fecha)
     {
-        $tarifa = $this->tarifa()->TarifaDescuento($fecha, $this->id);
-        return max(0, $this->precio_base - ($tarifa->descuento ?? 0));
+        $tarifa = $this->tarifa()->TarifaDescuento($fecha, $this->id)->first();
+        return optional($tarifa)->precio ?? 0;
     }
 }

@@ -18,6 +18,10 @@ class TipoHabitacionResource extends JsonResource
             "id" => $this->id,
             "nombre" => $this->nombre,
             "precio_base" => $this->precio_base,
+            "amenities" =>  $this->amenities,
+            "capacidad" =>  $this->capacidad,
+            "tipo_cama" =>  $this->tipo_cama,
+
         ];
     }
 }

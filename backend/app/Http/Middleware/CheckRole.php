@@ -15,7 +15,6 @@ class CheckRole
      */
     public function handle(Request $request, Closure $next, ...$role): Response
     {
-        // $roles = implode("|", $roles);
         $userRol = $request->user()?->rol->nombre;
         if (empty($role)) {
             return $next($request);
@@ -25,7 +24,7 @@ class CheckRole
             ->map(fn($r) => trim($r))
             ->toArray();
         if (!$request->user() || !in_array($userRol, $roles)) {
-            return response()->json(['message' => 'No tienes permisos para esta acción sssssss.'], 403);
+            return response()->json(['message' => 'No tienes permisos para esta acción.'], 403);
         }
         return $next($request);
     }

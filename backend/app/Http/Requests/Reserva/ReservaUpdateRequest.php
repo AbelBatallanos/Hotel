@@ -11,7 +11,7 @@ class ReservaUpdateRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return $this->user() && $this->user()->rol() && in_array($this->user()->rol->nombre, ["cliente", "recepcionista"]);
     }
 
     /**
@@ -22,7 +22,22 @@ class ReservaUpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            "fecha_ini" => "required|date|date_format:Y-m-d",
+            "fecha_fin" => "required|date|date_format:Y-m-d|after_or_equal:fecha_ini",
+            "habitaciones" => "nullable|array|min:1",
+            "habitaciones.*.id" => "nullable|integer|exists:habitaciones,id,deleted_at,NULL",
+        ];
+    }
+
+
+    public function messages()
+    {
+        return [
+            "fecha_ini.required" => "Es requerido este campo",
+            "fecha_ini.date" => "Debe ser el dato en formato fecha",
+            "fecha_fin.required" => "Es requerido este campo",
+            "fecha_fin.date" => "Debe ser el dato en formato fecha",
+
         ];
     }
 }

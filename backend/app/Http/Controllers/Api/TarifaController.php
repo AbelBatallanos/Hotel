@@ -23,7 +23,7 @@ class TarifaController extends Controller
         $validador = Validator::make($request->all(), [
             'fecha_ini' => 'required|date',
             'fecha_fin' => 'required|date|after_or_equal:fecha_ini',
-            'tipo_habitacion' => 'required|exists:tipos_habitacion,id',
+            'id_tipo_habitacion' => 'required|exists:tipos_habitacion,id',
             'precio' => 'required|numeric|min:0',
         ]);
 
@@ -31,7 +31,7 @@ class TarifaController extends Controller
         $validador->after(function ($validator) use ($request) {
             $inicio = Carbon::parse($request->fecha_ini);
             $fin = Carbon::parse($request->fecha_fin);
-            $tipoHab = $request->tipo_habitacion;
+            $tipoHab = $request->id_tipo_habitacion;
 
             $existe = Tarifa::where("id_tipo_habitacion", $tipoHab)
                 ->where("activo", true)
@@ -60,7 +60,7 @@ class TarifaController extends Controller
             Tarifa::create([
                 "fecha_ini" => $data['fecha_ini'],
                 "fecha_fin" => $data['fecha_fin'],
-                "id_tipo_habitacion" => $data['tipo_habitacion'],
+                "id_tipo_habitacion" => $data['id_tipo_habitacion'],
                 "precio" => $data['precio'],
 
             ]);
@@ -101,14 +101,18 @@ class TarifaController extends Controller
         if ($existe) {
             return response()->json(['error' => 'Existe otra tarifa activa que se solapa en ese rango.'], 422);
         }
+        $fieldS_updat = [];
+        foreach ($request->all() as $field => $value) {
+            $fieldS_updat[$field] = $value;
+        }
         try {
-            if ($request->has("fecha_ini")) $tarifa->fecha_ini = $request->fecha_ini;
-            if ($request->has("fecha_fin")) $tarifa->fecha_fin = $request->fecha_fin;
-            if ($request->has("id_tipo_habitacion")) $tarifa->id_tipo_habitacion = $request->id_tipo_habitacion;
-            if ($request->has("precio")) $tarifa->precio = $request->precio;
-            if ($request->has("activo")) $tarifa->activo = $request->activo;
+            // if ($request->has("fecha_ini")) $tarifa->fecha_ini = $request->fecha_ini;
+            // if ($request->has("fecha_fin")) $tarifa->fecha_fin = $request->fecha_fin;
+            // if ($request->has("id_tipo_habitacion")) $tarifa->id_tipo_habitacion = $request->id_tipo_habitacion;
+            // if ($request->has("precio")) $tarifa->precio = $request->precio;
+            // if ($request->has("activo")) $tarifa->activo = $request->activo;
 
-            $tarifa->save();
+            $tarifa->update($fieldS_updat);
         } catch (\Throwable $th) {
             Log::error('Error actualizando tarifa: ' . $th->getMessage());
             return response()->json(['error' => 'Error interno al actualizar tarifa'], 500);

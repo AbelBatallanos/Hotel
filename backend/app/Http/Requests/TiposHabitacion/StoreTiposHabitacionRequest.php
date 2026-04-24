@@ -30,10 +30,11 @@ class StoreTiposHabitacionRequest extends FormRequest
             "precio_base" => "required|numeric",
         ];
     }
-    public function message()
+    public function messages()
     {
         return [
             "tipo_cama.required" => "Es Obligatorio darle valor en tipo_cama",
+            "tipo_cama.string" => "Debe ser tipo texto",
             "amenities.required" => "No puede estar vacio amenities",
             "capacidad.required" => "No debe estar vacio la capacidad",
             "capacidad.numeric" => "Solo debe contener caracter numerico",
