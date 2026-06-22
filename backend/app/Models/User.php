@@ -64,6 +64,19 @@ class User extends Authenticatable
     {
         return $this->hasOne(Cliente::class, "id_user");
     }
+    public function IsAdmin(){
+        return $this->rol->nombre == "admin";
+    }
+    public function IsRecepcionista(){
+        return $this->rol->nombre == "recepcionista";
+    }
+    public function IsCliente(){
+        return $this->rol->nombre == "cliente";
+    }
+    // public function getIsRecepcionistaAttribute()
+    // {
+    //     return $this->rol->name === "recepcionista";
+    // }
     /**
      * Get the attributes that should be cast.
      *

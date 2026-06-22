@@ -50,7 +50,11 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
     Route::put("/reservacion/{reserva}", [ReservaController::class, "updateReservacionById"])->name("edit.reserva");
 
+<<<<<<< HEAD
     Route::delete("/reservacion/{reserva}", [ReservaController::class, "destroy"])->name("delete.reserva");
+=======
+    Route::delete("/reservacion/{id}", [ReservaController::class, "destroy"])->name("delete.reserva");
+>>>>>>> 0dcead6 (Implementacion de services correspondiente a las entidades, implementacion de scopes, mutadores y accessors en los modelos)
 });
 
 //ReservaDetalles
@@ -61,13 +65,19 @@ Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
 //Habitaciones
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::get("/habitaciones", [HabitacionController::class, "getAllHabitaciones"])->name("getAll.Habitaciones");
-    Route::get("/habitacion/{habitacion}", [HabitacionController::class, "showHabitacion"])->middleware("role:cliente|recepcionista")->name("show.habitacion");
+    Route::get("/habitacion/{habitacion}", [HabitacionController::class, "showHabitacion"])->middleware("role:admin|cliente|recepcionista")->name("show.habitacion");
 
+<<<<<<< HEAD
     Route::middleware(['auth', 'role:admin'])->group(function () {
         Route::post("/habitacion", [HabitacionController::class, "storehabitacion"]);
         Route::put("/habitacion/{habitacion}", [HabitacionController::class, "updateHabitacion"])->middleware("role:admin")->name("edit.habitacion");
         Route::delete("/habitacion/{habitacion}", [HabitacionController::class, "destroy"])->name("delete.habitacion");
     });
+=======
+    Route::post("/habitacion", [HabitacionController::class, "storehabitacion"]);
+    Route::post("/habitacion/{habitacion}", [HabitacionController::class, "updateHabitacion"])->middleware("role:admin")->name("edit.habitacion");
+    Route::delete("/habitacion/{id}", [HabitacionController::class, "destroy"])->name("delete.habitacion");
+>>>>>>> 0dcead6 (Implementacion de services correspondiente a las entidades, implementacion de scopes, mutadores y accessors en los modelos)
 });
 
 //Facturas

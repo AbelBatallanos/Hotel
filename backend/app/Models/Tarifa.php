@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Tarifa extends Model
 {
     // use SoftDeletes;
-    protected $fillable = ["fecha_ini", "fecha_fin", "id_tipo_habitacion", "precio", "activo"];
+    protected $fillable = ["fecha_ini", "fecha_fin", "id_tipo_habitacion", "descuento", "activo"];
 
     protected $casts = [
         'fecha_ini' => 'date',
@@ -29,7 +29,7 @@ class Tarifa extends Model
         return $query->where("activo", true)
             ->where("id_tipo_habitacion", $idTipoHabitacion)
             ->where("fecha_ini", "<=", $fecha)
-            ->where("fecha_fin", ">=", $fecha)->orderBy("id", "DESC")->first();
+            ->where("fecha_fin", ">=", $fecha);
     }
 
     // Scope para tarifas vigentes (activas y con fecha que incluye hoy)

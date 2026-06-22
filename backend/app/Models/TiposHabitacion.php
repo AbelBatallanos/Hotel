@@ -30,7 +30,15 @@ class TiposHabitacion extends Model
 
     public function montoDescuento($fecha)
     {
+<<<<<<< HEAD
         $tarifa = $this->tarifa()->TarifaDescuento($fecha, $this->id)->first();
         return optional($tarifa)->precio ?? 0;
+=======
+        $tarifa = $this->tarifa()->tarifaDescuento($fecha, $this->id)->first();
+
+        $descuento = ($tarifa && isset($tarifa->descuento)) ? $tarifa->descuento : 0;
+        $montoDescuento = $this->precio_base * ($descuento/100);
+        return max(0, $this->precio_base - $montoDescuento);
+>>>>>>> 0dcead6 (Implementacion de services correspondiente a las entidades, implementacion de scopes, mutadores y accessors en los modelos)
     }
 }

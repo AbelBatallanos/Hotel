@@ -25,4 +25,6 @@ class ReservaDetalle extends Model
     {
         return $this->belongsTo(Estados::class, "estado_id");
     }
+
+
 }

@@ -28,8 +28,14 @@ class HabitacionResource extends JsonResource
             ],
 
             "estado" => $this->estado->nombre ?? null,
+<<<<<<< HEAD
             "imagen" => $this->imagen ?? null,
 
+=======
+            "imagen" => $this->imagen,
+            "tipo_habitacion" => $this->tipohabitacion->nombre ?? null,
+            "precio" => $this->tipohabitacion->precio_base ?? null,
+>>>>>>> 0dcead6 (Implementacion de services correspondiente a las entidades, implementacion de scopes, mutadores y accessors en los modelos)
         ];
     }
 }

@@ -16,7 +16,7 @@ class ReservaPendientesResource extends JsonResource
     {
         return [
             "id" => $this->id,
-            "cliente" => new UserResumenResource($this->cliente->user),
+            "cliente" => new UserResumenResource($this->userCliente),
             "total" => $this->total,
             "fecha_ini" => $this->fecha_ini,
             "fecha_fin" => $this->fecha_fin,

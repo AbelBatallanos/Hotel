@@ -3,28 +3,28 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Auth\LoginAuthRequest;
+use App\Http\Requests\Auth\RegisterAuthRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
+
 class AuthController extends Controller
 {
 
-    public function register(Request $request)
+    public function register(RegisterAuthRequest $request)
     {
+        $validated =  $request->validated();
         try {
-            $fields = $request->validate([
-                "name" => 'required|string',
-                "email" => 'required|string|unique:users,email',
-                "password" => 'required|string',
-                "rol_id" => 'required|exists:roles,id',
-            ]);
-
+            
             $user = User::create([
-                "name" => $fields["name"],
-                'email' => $fields['email'],
-                'password' => Hash::make($fields['password']),
-                'rol_id' => $fields['rol_id']
+                "name" => $validated["name"],
+                "lastname" => $validated["lastname"],
+                "ci" => $validated["ci"],
+                'email' => $validated['email'],
+                'password' => Hash::make($validated['password']),
+                'rol_id' => $validated['rol_id']
             ]);
 
             $token = $user->createToken("hotel_token")->plainTextToken;
@@ -32,20 +32,18 @@ class AuthController extends Controller
             return response()->json(["user" => ["email" => $user->email, "name" => $user->name, "rol" => $user->rol->nombre], "token" => $token], 201);
         } catch (\Illuminate\Validation\ValidationException $e) {
             // Re-lanzamos el error de validación para que Laravel envíe el 422 automático
-            throw $e;
+            return response()->json(["error" => $e->getMessage()], 400);
         } catch (\Exception $e) {
             // Errores graves (base de datos caída, etc)
             return response()->json(['error' => $e->getMessage()], 500);
         }
     }
 
-    public function login(Request $request)
+
+    public function login(LoginAuthRequest $request)
     {
         try {
-            $fields = $request->validate([
-                "email" => 'required|string',
-                "password" => 'required|string',
-            ]);
+            $fields = $request->validated();
 
             $user = User::where("email", $fields["email"])->first();
             if (!$user || !Hash::check($fields["password"], $user->password)) {

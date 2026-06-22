@@ -31,6 +31,8 @@ class DatabaseSeeder extends Seeder
             UsersSeeder::class,
             // Agregamos un usuario administrador por defecto para pruebas
             DepartamentoSeeder::class,
+
+            HabitacionesSeeder::class,
         ]);
     }
 }
