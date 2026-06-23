@@ -12,26 +12,19 @@ use App\Http\Resources\ReservaResource;
 use App\Models\Habitaciones;
 use App\Models\Reserva;
 use App\Models\ReservaDetalle;
-<<<<<<< HEAD
-use App\Services\ReservaService;
-=======
 use App\Models\Tarifa;
 use App\Services\HabitacionService;
 use App\Services\ReservaService;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
->>>>>>> 0dcead6 (Implementacion de services correspondiente a las entidades, implementacion de scopes, mutadores y accessors en los modelos)
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Validation\ValidationException;
 
 use function Symfony\Component\Clock\now;
 
 class ReservaController extends Controller
 {
-<<<<<<< HEAD
-=======
     protected $reservaService;
     protected $habitacionService;
 
@@ -40,10 +33,9 @@ class ReservaController extends Controller
         $this->reservaService = $_reservaService;
         $this->habitacionService = $_habService;
     }
->>>>>>> 0dcead6 (Implementacion de services correspondiente a las entidades, implementacion de scopes, mutadores y accessors en los modelos)
 
     public function getMisReservaciones(Request $request)
-    {
+    { //cliente
         try {
             
             $misreservas = $this->reservaService->verMisReservas($request, $request->user());
@@ -64,12 +56,7 @@ class ReservaController extends Controller
         }
     }
 
-<<<<<<< HEAD
-
-    public function geAllReservaciones() //recepcion
-=======
     public function geAllReservaciones() 
->>>>>>> 0dcead6 (Implementacion de services correspondiente a las entidades, implementacion de scopes, mutadores y accessors en los modelos)
     {
         $reservaciones_pendientes = Reserva::pendientes()->detallesPendientes()->get();
         $reservaciones_ocupados = Reserva::ocupados()->detallesOcupados()->get();
@@ -80,26 +67,6 @@ class ReservaController extends Controller
     }
 
 
-<<<<<<< HEAD
-    public function storeReservacion(ReservaStoreRequest $request, ReservaService $reservaservice)
-    {
-        Log::info('Datos recibidos en storeReservacion:', $request->all());
-        $data = $request->validated();
-        try {
-            $reservaservice->procesarReserva($data, $request->user());
-            return response()->json(["message" => "Reservación Registrada Exisotamente"], 201);
-        } catch (ValidationException $ve) {
-            Log::warning('Validación reserva', ['errors' => $ve->errors()]);
-            return response()->json(['error' => 'Datos inválidos', 'details' => $ve->errors()], 422);
-        } catch (\Exception $e) {
-            Log::error('Error al procesar la reserva', [
-                'message' => $e->getMessage(),
-                'file' => $e->getFile(),
-                'line' => $e->getLine(),
-                'trace' => $e->getTraceAsString()
-            ]);
-            return response()->json(['error' => 'Error al procesar la reserva', 'details' => $e->getMessage()], 500);
-=======
     public function storeReservacion(ReservaStoreRequest $request)
     {
         Log::info('Datos recibidos en storeReservacion:', $request->all());
@@ -118,7 +85,6 @@ class ReservaController extends Controller
                 return response()->json(['error' => $e->getMessage()], 409);
             }
             return response()->json(['error' => 'Error interno al procesar la reserva'], 500);
->>>>>>> 0dcead6 (Implementacion de services correspondiente a las entidades, implementacion de scopes, mutadores y accessors en los modelos)
         }
     }// 
 
@@ -135,16 +101,12 @@ class ReservaController extends Controller
 
     public function updateReservacionById(ReservaUpdateRequest $request, Reserva $reserva)
     {
-<<<<<<< HEAD
-        $data = $request->validated();
-=======
         $fields =$request->validated();
->>>>>>> 0dcead6 (Implementacion de services correspondiente a las entidades, implementacion de scopes, mutadores y accessors en los modelos)
         try {
-            DB::transaction(function () use ($data, $reserva) {
-                if (!empty($data['habitaciones'])) {
-                    $antiguasIds = $reserva->detalles->pluck('habitacion_id')->unique()->values();
-                    Habitaciones::whereIn("id", $antiguasIds)->update(['id_estado' => 1]);
+            return DB::transaction(function () use ($request, $reserva) {
+                if ($request->has("habitaciones")) {
+                    $antiguasIds = $reserva->detalles->pluck('habitacion_id');
+                    Habitaciones::whereIn("id", $antiguasIds)->update(['estado_id' => 1]);
 
                     $reserva->detalles()->where("estado_id", 5)->update([
                         'estado_id' => 7,
@@ -153,35 +115,32 @@ class ReservaController extends Controller
                     $reserva->detalles()->delete();
 
                     $nuevoTotal = 0;
-                    $habitIds = collect($data["habitaciones"])->pluck("id");
+                    $habitIds = collect($request->habitaciones)->pluck("id");
                     $habitaciones = Habitaciones::whereIn('id', $habitIds)->get();
 
                     //Creamdo nuevoas detalles
                     foreach ($habitaciones as $hb) {
-                        $descuento = optional($hb->tipohabitacion)->montoDescuento($data["fecha_ini"]) ?? 0;
-                        $subtotal = max(0, $hb->tipohabitacion->precio_base - $descuento);
+                        $subtotal = $hb->tipohabitacion->precio_base;
                         $nuevoTotal += $subtotal;
 
-                        $reserva->detalles()->create(
+                        $reserva->detalles->create(
                             [
                                 'habitacion_id' => $hb->id,
                                 'subtotal' => $subtotal,
-                                "estado_id" => 5,
-                                "created_at" => now(),
-                                "updated_at" => now()
                             ]
                         );
-                        $hb->update(["id_estado" => 2]);
+                        $hb->update(["estado_id" => 2]);
                     }
 
                     $reserva->total = $nuevoTotal;
                 }
+                if ($request->has("fecha_ini")) $reserva->fecha_ini = $request->fecha_ini;
+                if ($request->has("fecha_fin")) $reserva->fecha_fin = $request->fecha_fin;
+                //guardamos los nuevos datos de reserva
+                $reserva->save();
+
+                return response()->json(['message' => 'Datos actualizados con éxito'], 200);
             });
-
-            //guardamos los nuevos datos de reserva
-            $reserva->update(["fecha_ini" => $data["fecha_ini"], "fecha_fin" => $data["fecha_fin"], "updated_at" => today()->format("Y-m-d H:i:s")]);
-
-            return response()->json(['message' => 'Datos actualizados con éxito'], 200);
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
         }
@@ -190,28 +149,16 @@ class ReservaController extends Controller
     public function destroy($id)
     {
         try {
-<<<<<<< HEAD
-            return DB::transaction(function () use ($reserva) {
-
-                // 1. Liberar las habitaciones asociadas a esta reserva
-                $habitacionesIds = $reserva->detalles->pluck('habitacion_id');
-                $detallesIds = $reserva->detalles->pluck('id')->toArray();
-                Habitaciones::whereIn('id', $habitacionesIds)->update(['id_estado' => 1]); // Disponible
-                ReservaDetalle::whereIn("id", $detallesIds)->update(["estado_id" => 7, 'updated_at' => now()]); //cancelado
-                $reserva->detalles()->delete();
-                $reserva->delete();
-
-                return response()->json(['message' => 'Reserva cancelada y habitaciones liberadas']);
-            });
-=======
-            $reserva = Reserva::findOrFail($id);
-           
+            $reserva = Reserva::find($id);
+            if (!$reserva) {
+                return response()->json(['error' => 'La reserva no existe'], 404);
+            }   
             $this->reservaService->cancelarReserva($reserva);
             return response()->json(['message' => 'Reserva cancelada y habitaciones liberadas']);
             
-        }catch (ModelNotFoundException $e) {
+        }
+        catch (ModelNotFoundException $e) {
             return response()->json(['error' => "La reserva con id {$id} no existe"], 404);
->>>>>>> 0dcead6 (Implementacion de services correspondiente a las entidades, implementacion de scopes, mutadores y accessors en los modelos)
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
         };

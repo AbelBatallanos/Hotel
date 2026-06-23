@@ -4,12 +4,8 @@ namespace App\Http\Requests\Habitacion;
 
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
-<<<<<<< HEAD
-use Illuminate\Validation\ValidationException;
-=======
 use Illuminate\Validation\Rule;
 use Override;
->>>>>>> 0dcead6 (Implementacion de services correspondiente a las entidades, implementacion de scopes, mutadores y accessors en los modelos)
 
 class UpdateHabitacionRequest extends FormRequest
 {
@@ -29,25 +25,6 @@ class UpdateHabitacionRequest extends FormRequest
     public function rules(): array
     {
         return [
-<<<<<<< HEAD
-            "num_habitacion" => "sometimes|string",
-            "id_tipo_habitacion" => "sometimes|exists:tipos_habitacion,id",
-            "estado_id" => "sometimes|exists:estados,id"
-        ];
-    }
-
-
-    public function passedValidation()
-    {
-        $allowed = ["num_habitacion", "id_tipo_habitacion", "estado_id"];
-        $extraKeys = array_diff(array_keys($this->all()), $allowed);
-
-        if ($extraKeys) {
-            throw ValidationException::withMessages([
-                'extra' => ["Campos no permitidos: " . implode(", ", $extraKeys)]
-            ]);
-        }
-=======
             // Al usar Rule, pasamos la regla de un string a un array
             "num_habitacion" => [
                 "sometimes",
@@ -79,6 +56,5 @@ class UpdateHabitacionRequest extends FormRequest
             "imagen.mimes"   => "La imagen debe tener un formato válido: jpg, jpeg, png o webp.",   
 
             ];
->>>>>>> 0dcead6 (Implementacion de services correspondiente a las entidades, implementacion de scopes, mutadores y accessors en los modelos)
     }
 }

@@ -21,4 +21,22 @@ class Favorito extends Model
     {
         return $this->belongsTo(Habitaciones::class, "id_habitacion");
     }
+
+
+    public function scopePertenece($query, $idFavorito, $idCliente){
+        return  $query->where("id", $idFavorito)
+                    ->where("id_cliente", $idCliente);
+    }
+
+    public function scopeExistenDatos($query, $idHab, $idCliente){
+        return $query->where("id_habitacion",$idHab)
+                     ->where("id_cliente", $idCliente)
+                     ->whereNull("deleted_at")
+                     ->exists();
+    }
+
+    public function scopeObtenerPropiosDisponibles($query, $idCliente){
+        return $query->where("id_cliente", $idCliente)
+                    ->whereNull("deleted_at");
+    }
 }

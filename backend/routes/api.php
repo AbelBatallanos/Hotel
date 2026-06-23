@@ -24,11 +24,18 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
-Route::post('/register', [AuthController::class, 'register']);
-Route::post('/login', [AuthController::class, 'login']);
-Route::get('/allUsuarios', [UserController::class, 'getAllUsers']);
+Route::post('/register', [UserController::class, 'storeCliente']);//Cliente
 
+Route::post("/personal/register", [UserController::class, "storePersonal"]);//Empleado
+
+Route::post('/login', [AuthController::class, 'login']);
 Route::middleware(["auth:sanctum"])->post('/logout', [AuthController::class, "logout"]);
+
+Route::middleware(['auth:sanctum', 'role:admin'])->group(function(){
+    Route::get("/personal", [UserController::class, "getAllPersonal"])->name("personal");
+    Route::post("/personal/register", [UserController::class, "storePersonal"])->name("post.personal");
+    
+});
 
 Route::get("/tiposhabitacion", [TipoHabitacionController::class, "getAll"])->middleware(["auth:sanctum"])->name("getAll.tiposhabitacion");
 
@@ -50,34 +57,22 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
     Route::put("/reservacion/{reserva}", [ReservaController::class, "updateReservacionById"])->name("edit.reserva");
 
-<<<<<<< HEAD
-    Route::delete("/reservacion/{reserva}", [ReservaController::class, "destroy"])->name("delete.reserva");
-=======
     Route::delete("/reservacion/{id}", [ReservaController::class, "destroy"])->name("delete.reserva");
->>>>>>> 0dcead6 (Implementacion de services correspondiente a las entidades, implementacion de scopes, mutadores y accessors en los modelos)
 });
 
 //ReservaDetalles
-Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
+Route::middleware(['auth:sanctum', 'role:'])->group(function () {
     Route::delete('/detalle/{id}', [ReservaDetalleController::class, "destroy"]);
 });
 
 //Habitaciones
-Route::middleware(['auth:sanctum'])->group(function () {
+Route::middleware(['auth:sanctum', "role:admin"])->group(function () {
     Route::get("/habitaciones", [HabitacionController::class, "getAllHabitaciones"])->name("getAll.Habitaciones");
     Route::get("/habitacion/{habitacion}", [HabitacionController::class, "showHabitacion"])->middleware("role:admin|cliente|recepcionista")->name("show.habitacion");
 
-<<<<<<< HEAD
-    Route::middleware(['auth', 'role:admin'])->group(function () {
-        Route::post("/habitacion", [HabitacionController::class, "storehabitacion"]);
-        Route::put("/habitacion/{habitacion}", [HabitacionController::class, "updateHabitacion"])->middleware("role:admin")->name("edit.habitacion");
-        Route::delete("/habitacion/{habitacion}", [HabitacionController::class, "destroy"])->name("delete.habitacion");
-    });
-=======
     Route::post("/habitacion", [HabitacionController::class, "storehabitacion"]);
     Route::post("/habitacion/{habitacion}", [HabitacionController::class, "updateHabitacion"])->middleware("role:admin")->name("edit.habitacion");
     Route::delete("/habitacion/{id}", [HabitacionController::class, "destroy"])->name("delete.habitacion");
->>>>>>> 0dcead6 (Implementacion de services correspondiente a las entidades, implementacion de scopes, mutadores y accessors en los modelos)
 });
 
 //Facturas
@@ -87,8 +82,7 @@ Route::middleware(['auth:sanctum', 'role:recepcionista|admin'])->group(function 
 });
 
 //Tareas
-Route::middleware(['auth:sanctum'])->group(function () {
-    //Crear ruta para ver las tareas de alguien en espefico pasando su nombre o ci algo unico
+Route::middleware(['auth:sanctum',"userType:admin,empleado"])->group(function () {
     Route::post("/tarea", [TareaController::class, "asignarTarea"])->name("store.tarea");
     Route::put("/tarea/{id}", [TareaController::class, "updateTarea"])->name("upd.tarea");
     Route::delete("/tarea/{id}", [TareaController::class, "deleteTarea"])->name("delete.tarea");
@@ -96,9 +90,9 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
 //Favoritos
 Route::middleware(['auth:sanctum', 'role:cliente'])->group(function () {
-    Route::get("/misfavoritos", [FavoritoController::class, "misFavoritos"])->name("");
-    Route::post("/favorito", [FavoritoController::class, "store"])->name("");
-    Route::delete("/favorito/{id}", [FavoritoController::class, "destroy"])->name("");
+    Route::get("/misfavoritos", [FavoritoController::class, "misFavoritos"])->name("get.favorito");
+    Route::post("/favorito", [FavoritoController::class, "store"])->name("store.favorito");
+    Route::delete("/favorito/{idFavorito}", [FavoritoController::class, "destroy"])->name("delete.favorito");
 });
 
 //Reparaciones
@@ -109,7 +103,6 @@ Route::middleware(['auth:sanctum', 'role:admin|recepcionista'])->group(function 
     Route::put("/elegirreparacion", [ReparacionController::class, "reclamarReparacion"]);
 });
 
-
 //Servicios
 Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
     Route::get("/servicios", [ServicioController::class, "index"])->name("index.servicio");
@@ -118,7 +111,6 @@ Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
     Route::delete("/servicio/{id}", [ServicioController::class, "destroy"])->name("destroy.servicio");
 });
 
-
 //Tarifas
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::get("/tarifas", [TarifaController::class, "index"])->name("");
@@ -126,15 +118,13 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::put("/tarifa/{id}", [TarifaController::class, "update"])->name("upd.tarifa");
 });
 
-
 //TipoHabitacion
 Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
     Route::get("/tiposhabitacion", [TipoHabitacionController::class, "getAll"])->name("");
-    Route::post("/tipohab", [TipoHabitacionController::class, "store"])->name("");
-    Route::put("/tipohab/{id}", [TipoHabitacionController::class, "update"])->name("");
-    Route::delete("/tipohab/{id}", [TipoHabitacionController::class, "destroy"])->name("");
+    Route::get("/tipohab", [TipoHabitacionController::class, "store"])->name("");
+    Route::get("/tipohab/{id}", [TipoHabitacionController::class, "update"])->name("");
+    Route::get("/tipohab/{id}", [TipoHabitacionController::class, "destroy"])->name("");
 });
-
 
 //Proveedores
 Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
@@ -159,11 +149,6 @@ Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
     Route::get("/estado/{id}", [EstadoController::class, "update"]);
     Route::get("/estado/{id}", [EstadoController::class, "destroy"]);
 });
-
-Route::middleware(['auth:sanctum', 'role:admin'])
-    ->get("/personal", [UserController::class, "getAllPersonal"])->name("personal");
-Route::middleware(['auth:sanctum', 'role:admin'])
-    ->post("/personal", [UserController::class, "storePersonal"])->name("post.personal");
 
 Route::get("/", [Habitaciones::class])->name("home.cliente");
 Route::get("/recepcion", [Habitaciones::class])->name("dashboard.empresa");

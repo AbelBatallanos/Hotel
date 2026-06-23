@@ -22,29 +22,10 @@ class ReservaUpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-<<<<<<< HEAD
-            "fecha_ini" => "required|date|date_format:Y-m-d",
-            "fecha_fin" => "required|date|date_format:Y-m-d|after_or_equal:fecha_ini",
-            "habitaciones" => "nullable|array|min:1",
-            "habitaciones.*.id" => "nullable|integer|exists:habitaciones,id,deleted_at,NULL",
-        ];
-    }
-
-
-    public function messages()
-    {
-        return [
-            "fecha_ini.required" => "Es requerido este campo",
-            "fecha_ini.date" => "Debe ser el dato en formato fecha",
-            "fecha_fin.required" => "Es requerido este campo",
-            "fecha_fin.date" => "Debe ser el dato en formato fecha",
-
-=======
             "fecha_ini" => "sometimes|date",
             "fecha_fin" => "sometimes|date",
             "habitaciones" => "sometimes|array|min:1",
             "habitaciones.*.id" => "numeric|exists:habitaciones,id",
->>>>>>> 0dcead6 (Implementacion de services correspondiente a las entidades, implementacion de scopes, mutadores y accessors en los modelos)
         ];
     }
 }

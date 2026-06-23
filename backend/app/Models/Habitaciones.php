@@ -8,18 +8,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Habitaciones extends Model
 {
     use SoftDeletes;
-<<<<<<< HEAD
-    protected $fillable = [
-        "id_tipo_habitacion",
-        "num_habitacion",
-        "id_estado",
-        "imagen",
-        "descripcion"
-    ];
-=======
     protected $table = 'habitaciones';
     protected $fillable = ["id_tipo_habitacion", "num_habitacion", "id_estado", "imagen", "descripcion"];
->>>>>>> 0dcead6 (Implementacion de services correspondiente a las entidades, implementacion de scopes, mutadores y accessors en los modelos)
 
     /*  Relaciones  */
     public function estado()

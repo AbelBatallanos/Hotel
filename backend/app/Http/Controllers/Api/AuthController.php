@@ -47,7 +47,7 @@ class AuthController extends Controller
 
             $user = User::where("email", $fields["email"])->first();
             if (!$user || !Hash::check($fields["password"], $user->password)) {
-                return response(["messageError" => "Credenciales Incorrectas"], 400);
+                return response()->json(["error" => "Credenciales Incorrectas"], 400);
             }
 
             $token = $user->createToken("hotel_token")->plainTextToken;
@@ -58,8 +58,7 @@ class AuthController extends Controller
             throw $e;
         } catch (\Exception $e) {
             return response()->json([
-                'error' => true,
-                'message' => 'Error interno del servidor',
+                'error' => 'Error interno del servidor',
                 'details' => $e->getMessage()
             ], 500);
         }

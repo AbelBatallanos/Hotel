@@ -30,7 +30,6 @@ class RegisterAuthRequest extends FormRequest
             "email" => 'required|email|unique:users,email',
             "ci" => 'required|string|unique:users,ci', 
             "password" => 'required|string',
-            "rol_id" => 'required|exists:roles,id',
         ];
     }
 

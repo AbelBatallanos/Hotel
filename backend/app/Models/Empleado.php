@@ -14,7 +14,7 @@ class Empleado extends Model
 
     protected $fillable = [
         "id_user",
-        "fecha_contratacion",
+        "fechahora_contratacion",
         "sueldo",
         "historial_notas",
         "id_turno"

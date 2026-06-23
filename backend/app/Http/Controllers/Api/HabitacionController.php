@@ -3,10 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-<<<<<<< HEAD
-=======
 use App\Http\Requests\Habitacion\StoreHabitacionRequest;
->>>>>>> 0dcead6 (Implementacion de services correspondiente a las entidades, implementacion de scopes, mutadores y accessors en los modelos)
 use App\Http\Requests\Habitacion\UpdateHabitacionRequest;
 use App\Http\Resources\HabitacionResource;
 use App\Models\Habitaciones;
@@ -38,35 +35,6 @@ class HabitacionController extends Controller
 
     public function getAllHabitaciones()
     {
-<<<<<<< HEAD
-        try {
-            $habitaciones_disponibles = Habitaciones::with(["estado", "tipohabitacion"])->where("id_estado", 1)->orderBy("id", "DESC")->get();
-
-            return response()->json([
-                "estado" => 200,
-                "habitaciones_disponibles" => HabitacionResource::collection($habitaciones_disponibles)
-            ], 200);
-        } catch (\Exception $e) {
-            Log::error($e->getMessage() . "PEPE", ["file" => $e->getFile(), "codigo" => $e->getCode()]);
-        }
-    }
-
-
-    public function storehabitacion(Request $request)
-    {
-        $request->validate([
-            "num_habitacion" => "required|unique:habitaciones,num_habitacion",
-            "id_tipo_habitacion" => ['required', Rule::exists("tipos_habitacion", 'id')->whereNull("deleted_at")],
-            "imagen" => "nullable|image|mimes:jpg,jpeg,png|max:2048",
-            "descripcion" => "nullable|string",
-            "titulo" => "nullable|string"
-
-        ]);
-
-        // return response()->json([$request->all()]);
-        // 2. Extraemos todos los datos (menos el archivo)
-        $datosHabitacion = $request->except('imagen');
-=======
         $habitaciones_disponibles = Habitaciones::conDetalles()
                                                 ->disponibles()
                                                 ->orderBy("id", "DESC")
@@ -82,7 +50,6 @@ class HabitacionController extends Controller
         $datos = $request->validated();
 
         $this->habitacionService->crearHabitacion($datos, $request->file("imagen"));
->>>>>>> 0dcead6 (Implementacion de services correspondiente a las entidades, implementacion de scopes, mutadores y accessors en los modelos)
 
         return response()->json([
             'message' => 'Habitación creada con éxito',
@@ -99,19 +66,6 @@ class HabitacionController extends Controller
 
     public function updateHabitacion(UpdateHabitacionRequest $request, Habitaciones $habitacion)
     {
-<<<<<<< HEAD
-        $habitacion->update($request->validated());
-        return response()->json(["message" => "Habitación actualizada"], 200);
-    }
-
-    public function destroy(Habitaciones $habitacion)
-    {
-
-        $habitacion->delete();
-
-        return response()->json(["message" => "Habitacion Eliminada Correctamente"], 200);
-    }
-=======
         $datos = $request->validated();
         // dd($datos);
         $this->habitacionService->updateHabitacion($habitacion, $datos, $request->file("imagen"));
@@ -138,5 +92,4 @@ class HabitacionController extends Controller
             ], 500);
         }
     }
->>>>>>> 0dcead6 (Implementacion de services correspondiente a las entidades, implementacion de scopes, mutadores y accessors en los modelos)
 }
