@@ -66,13 +66,16 @@ Route::middleware(['auth:sanctum', 'role:'])->group(function () {
 });
 
 //Habitaciones
-Route::middleware(['auth:sanctum', "role:admin"])->group(function () {
+Route::middleware(['auth:sanctum'])->group(function () {
     Route::get("/habitaciones", [HabitacionController::class, "getAllHabitaciones"])->name("getAll.Habitaciones");
     Route::get("/habitacion/{habitacion}", [HabitacionController::class, "showHabitacion"])->middleware("role:admin|cliente|recepcionista")->name("show.habitacion");
 
-    Route::post("/habitacion", [HabitacionController::class, "storehabitacion"]);
-    Route::post("/habitacion/{habitacion}", [HabitacionController::class, "updateHabitacion"])->middleware("role:admin")->name("edit.habitacion");
-    Route::delete("/habitacion/{id}", [HabitacionController::class, "destroy"])->name("delete.habitacion");
+    Route::middleware([ "role:admin"])->group(function () {
+        
+        Route::post("/habitacion", [HabitacionController::class, "storehabitacion"]);
+        Route::post("/habitacion/{habitacion}", [HabitacionController::class, "updateHabitacion"])->middleware("role:admin")->name("edit.habitacion");
+        Route::delete("/habitacion/{id}", [HabitacionController::class, "destroy"])->name("delete.habitacion");
+    });
 });
 
 //Facturas
@@ -82,11 +85,17 @@ Route::middleware(['auth:sanctum', 'role:recepcionista|admin'])->group(function 
 });
 
 //Tareas
-Route::middleware(['auth:sanctum',"userType:admin,empleado"])->group(function () {
-    Route::post("/tarea", [TareaController::class, "asignarTarea"])->name("store.tarea");
+Route::middleware(['auth:sanctum',"userType:admin|empleado"])->group(function () {
+    Route::get("/tarea/pendientes", [TareaController::class, "MisTareas"])->name("get.mistareas");
+    // Route::post("/tarea/{id}/realizado", [TareaController::class, "Realizado"])->name("");
     Route::put("/tarea/{id}", [TareaController::class, "updateTarea"])->name("upd.tarea");
-    Route::delete("/tarea/{id}", [TareaController::class, "deleteTarea"])->name("delete.tarea");
+
+    Route::middleware(['role:admin|recepcionista'])->group(function () {
+        Route::post("/tarea", [TareaController::class, "asignarTarea"])->name("store.tarea");
+    });
+    Route::middleware("role:admin")->delete("/tarea/{id}", [TareaController::class, "deleteTarea"])->name("delete.tarea");
 });
+
 
 //Favoritos
 Route::middleware(['auth:sanctum', 'role:cliente'])->group(function () {

@@ -37,7 +37,7 @@ class UserController extends Controller
             "name" => $fields["name"],
             "lastname"=> $fields["lastname"],
             'email' => $fields['email'],
-            'password' => Hash::make($fields["password"]) ?? Hash::make(12345678),
+            'password' => Hash::make($fields["password"]?? 12345678) ,
             "ci"=> $fields["ci"],
             'rol_id' => $fields['rol'],
             "es_empleado"=> 1,

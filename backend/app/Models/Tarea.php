@@ -25,4 +25,19 @@ class Tarea extends Model
         'fecha_creada' => 'datetime',
         'fecha_limite' => 'datetime',
     ];
+
+    public function empleado(){
+        return $this->belongsTo(Empleado::class, "id_empleado");
+    }
+    public function estado(){
+        return $this->belongsTo(Estados::class, "id_estado");
+    }
+
+    public function scopePendientes($query){
+        return $query->where("id_estado", 5);
+    }
+
+    public function scopePertenece($query, $idEmpleado){
+        return $query->where("id_empleado", $idEmpleado);
+    }
 }

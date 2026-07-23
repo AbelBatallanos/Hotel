@@ -16,12 +16,18 @@ class CheckUserType
     public function handle(Request $request, Closure $next, ...$types): Response
     {
 
+        if(empty($types)){
+            return $next($request);
+        }
+
+        $types = collect($types)
+                ->flatMap(fn($t) => explode("|", $t))
+                ->map(fn($t) => trim($t))
+                ->toArray();
+                
         $user =$request->user();
         if (!$user) {
             return response()->json(['error' => 'No autenticado.'], 401);
-        }
-        if(empty($types)){
-            return $next($request);
         }
 
         if($user->es_admin){

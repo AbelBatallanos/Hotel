@@ -1,30 +1,25 @@
-import type { THabitaciones } from "../../Habitaciones/types"
-
-
-
+import type { THabitaciones } from "../../Habitaciones/types";
 
 export type TReservas = {
-    id: number,
-    detalles : Detalles[],
-    fecha_ini : string ,
-    fecha_fin : string,
-    total: number,
-    estado: string,
-}
+  id: number;
+  detalles: Detalles[];
+  fecha_ini: string;
+  fecha_fin: string;
+  total: number;
+  estado: string;
+};
 
 type Detalles = {
-    estado : string,
-    subtotal: number,
-    habitacion: THabitaciones,
-}
-
+  estado: string;
+  subtotal: number;
+  habitacion: THabitaciones;
+};
 
 export type ErrorHabitacionesOcupadasT = {
-    error:  boolean,
-    messageError: string,
-    ocupadas : {id: string, codigo: string}[],
-}
-
+  error: boolean;
+  messageError: string;
+  ocupadas: { id: string; codigo: string }[];
+};
 
 interface TUsuario {
   name: string;
@@ -32,18 +27,18 @@ interface TUsuario {
 }
 
 export type TReservaConfirmacion = TReservas & {
-    usuario : TUsuario
-}
+  usuario: TUsuario;
+};
 
 export type TReservasOcupadas = Omit<TReservas, "estado"> & {
-    usuario : TUsuario,
-    estado : "Ocupada"
-}
-export type TReservasPendientes = Omit<TReservas, "detalles"| "estado"> & {
-    total_habitaciones : number | string,
-    usuario : TUsuario,
-    estado: "Pendiente"
-} 
+  cliente: TUsuario;
+  estado: "Ocupada";
+};
+export type TReservasPendientes = Omit<TReservas, "detalles" | "estado"> & {
+  total_habitaciones: number | string;
+  cliente: TUsuario;
+  estado: "Pendiente";
+};
 // interface THabitacion {
 //   id: number;
 //   codigo: string;

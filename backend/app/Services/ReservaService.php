@@ -87,7 +87,6 @@ class ReservaService{
         return $misreservas;
     }
 
-
     public function actualizarReserva(ReservaUpdateRequest $request, Reserva $reserva){
             DB::transaction(function()use($request, $reserva){
                 if($request->has("habitaciones")){
@@ -128,8 +127,6 @@ class ReservaService{
         });
     }
 
-
-
     private function resolverIdCliente($user, $fields):int{
 
         if($user->IsCliente()){
@@ -147,14 +144,6 @@ class ReservaService{
         // Solo asignamos si es Recepcionista (rol 2)
         return ($user->rol_id == 2) ? $user->id : null;
     }
-
-
 }
-
-
-
-
-
-
 
 ?>

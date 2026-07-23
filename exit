@@ -1,0 +1,83 @@
+[33mcommit f081964f4ad7151921f58e71ea12fdcc9a786d5c[m[33m ([m[1;36mHEAD[m[33m, [m[1;31morigin/refactorizacion[m[33m)[m
+Author: Abel Batallanos C <146384338+AbelBatallanos@users.noreply.github.com.>
+Date:   Fri Apr 24 06:53:44 2026 -0400
+
+    actualizacion de metodos
+
+[33mcommit fdac324083aca913e07081fc46ec193000136759[m
+Author: Abel Batallanos C <146384338+AbelBatallanos@users.noreply.github.com.>
+Date:   Sat Mar 28 01:41:57 2026 -0400
+
+    Forzar PHP 8.3 para compatibilidad con Pest
+
+[33mcommit 656ccbaf0936ee3a9a60e952ea6adcb13567e053[m
+Author: Abel Batallanos C <146384338+AbelBatallanos@users.noreply.github.com.>
+Date:   Sat Mar 28 01:26:32 2026 -0400
+
+    config para railway
+
+[33mcommit f5e47997a34c886afc6473534e8d2203ff51a0ab[m
+Author: Abel Batallanos C <146384338+AbelBatallanos@users.noreply.github.com.>
+Date:   Wed Mar 25 23:42:58 2026 -0400
+
+    leves modificaciones
+
+[33mcommit 26bf308da8cac741d3594ebbbb0f6b4bc3b470f2[m
+Author: Abel Batallanos C <146384338+AbelBatallanos@users.noreply.github.com.>
+Date:   Wed Mar 25 17:30:55 2026 -0400
+
+    actualizacion de rutas
+
+[33mcommit 45a62131cb8e231c20dcdbe52e6850f4517a01bb[m
+Author: Abel Batallanos C <146384338+AbelBatallanos@users.noreply.github.com.>
+Date:   Wed Mar 25 16:33:13 2026 -0400
+
+    agregacion de metodos, request, event, listener, service
+
+[33mcommit c924fcaa34a3d1672a3964183e7b063706cb2004[m
+Author: Abel Batallanos C <146384338+AbelBatallanos@users.noreply.github.com.>
+Date:   Mon Mar 23 00:28:39 2026 -0400
+
+    metodos de tarifa implementados
+
+[33mcommit 7809099c8f60e9d86629a04ccdcacb3ef5cf3ff5[m
+Author: Abel Batallanos C <146384338+AbelBatallanos@users.noreply.github.com.>
+Date:   Sun Mar 22 11:50:20 2026 -0400
+
+    asignacion de rutas
+
+[33mcommit a833c630f81c17f61b11d8acf4f848f09f9e4527[m
+Author: Abel Batallanos C <146384338+AbelBatallanos@users.noreply.github.com.>
+Date:   Sat Mar 21 21:00:03 2026 -0400
+
+    implementacion de index, creacion de carpeta Request y leves cambios en los controladores
+
+[33mcommit e02f7cc1213fd8de225a0e79f7c987b50ba6eb72[m
+Author: Abel Batallanos C <146384338+AbelBatallanos@users.noreply.github.com.>
+Date:   Sat Mar 21 17:35:50 2026 -0400
+
+    metodos principales agregados
+
+[33mcommit 0d894f06ae4db8675b0a6d8e1e08c17a6e8d52e0[m
+Author: Abel Batallanos C <146384338+AbelBatallanos@users.noreply.github.com.>
+Date:   Fri Mar 20 05:24:47 2026 -0400
+
+    Cambios de refactorización
+
+[33mcommit e600e4937374c0e8abb9c3db83c33a5eeab8a318[m
+Author: Abel Batallanos C <146384338+AbelBatallanos@users.noreply.github.com.>
+Date:   Wed Mar 18 01:15:43 2026 -0400
+
+    nuevas migraciones , modelos y controladores
+
+[33mcommit 6ff9be7e711b8a032d432d092f9f42bc6b0f5524[m
+Author: Abel Batallanos C <146384338+AbelBatallanos@users.noreply.github.com.>
+Date:   Tue Mar 17 09:29:36 2026 -0400
+
+    nuevos archivos
+
+[33mcommit 43e78319d68ab8af61fd9129d23ff326d35fc21e[m
+Author: Abel Batallanos C <146384338+AbelBatallanos@users.noreply.github.com.>
+Date:   Wed Mar 11 15:13:08 2026 -0400
+
+    first commit
